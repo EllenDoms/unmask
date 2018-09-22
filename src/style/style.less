@@ -1,5 +1,56 @@
 out: style.css
 
+@primary : #E5376E;
+@secondary : #383B41;
+@font: 'Roboto', sans-serif;
+@font-bold: 'Roboto-Black', sans-serif;
+@grey: #F6F6F6;
+@boxShadow: 0 0 7px 0 rgba(0,0,0,0.08);
+@transition: all 0.2s ease-out;
+
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: @font;
+  margin: 0;
+  padding: 0;
+}
+
+.center {text-align: center;}
+
+h1 {
+  font-family: @font-bold;
+  font-size: 50px;
+  color: @primary;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+p {
+  font-family: @font;
+  font-size: 16px;
+  color: #65696F;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+
+.container {
+  width: ~"calc(100% - 60px)";
+  margin: 30px;
+}
+
+.footer {
+  position: fixed;
+  width: 100vw;
+  bottom: 0;
+  display: flex;
+  height: 83px;
+  background-color: #FFF;
+  box-shadow: @boxShadow;
+  button {
+    width: 25%;
+    height: 100%;
+    flex-direction: row;
+    &.active {
+      color: @primary;
+    }
+  }
 }

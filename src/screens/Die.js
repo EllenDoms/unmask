@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-export default class Score extends Component {
+export default class Die extends Component {
   render() {
     return (
       <div>
-        Score
+        I die button
       </div>
     )
   }

@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './style/style.css';
+import { connect } from "react-redux";
+import { HashRouter, Route, Switch } from 'react-router-dom';
 
-class App extends Component {
+import requireAuth from "./auth/requireAuth";
+import Login from './screens/Login';
+import Game from './screens/Game';
+
+export default class App extends Component {
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <HashRouter>
+        <div id='page'>
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route exact path="/game" component={Game} />
+          </Switch>
+        </div>
+      </HashRouter>
     );
   }
 }
-
-export default App;
