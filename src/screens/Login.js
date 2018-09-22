@@ -10,12 +10,12 @@ import FooterBtn from '../components/FooterBtn';
 
 class Login extends Component {
   componentWillMount() {
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user != null) {
-          this.props.login(user)
-        }
-      });
-    }
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user != null) {
+        this.props.login(user)
+      }
+    });
+  }
   login() {
     var provider = new firebase.auth.FacebookAuthProvider();
     firebase.auth().signInWithPopup(provider)

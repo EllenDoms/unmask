@@ -11,27 +11,21 @@ const ruleItems = [
 
 
 export default class Rules extends Component {
-  renderRules() {
-    return(
-      <div className='item'>
-        <div className='number'>1</div>
-        <p className='text'>bla</p>
-      </div>
-    )
-  }
   render() {
     return (
-      <div className='container'>
-        {/* image */}
-        <p className='center'>You are a</p>
-        <h1>Capulet</h1>
-        <div id='rules' className='greyBg'>
+      <div className='content'>
+        <div className='top container'>
+          <img className="avatarSmall centerImage" src={this.props.props.fbPhotoUrl} />
+          <p className='center'>You are a</p>
+          <h1>{this.props.props.family}</h1>
+        </div>
+        <div id='rules' className='greyBg container'>
           {ruleItems.map((rule, key) => {
-            let number = key +1
+            let number = key+1
             return(
               <div className='item' key={key}>
-                <div className='number'>{number}</div>
-                <p className='text'>{rule}</p>
+                <div className="left"><div className='number'>{number}</div></div>
+                <div className="right"><p className='text'>{rule}</p></div>
               </div>
             )
           })}

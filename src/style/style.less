@@ -5,7 +5,7 @@ out: style.css
 @font: 'Roboto', sans-serif;
 @font-bold: 'Roboto-Black', sans-serif;
 @grey: #F6F6F6;
-@boxShadow: 0 0 7px 0 rgba(0,0,0,0.08);
+@boxShadow: 10px 0 10px 0 rgba(0,0,0,0.15);
 @transition: all 0.2s ease-out;
 
 * {
@@ -15,6 +15,7 @@ out: style.css
 }
 
 .center {text-align: center;}
+.centerImage {align-self: center; display: flex;}
 
 h1 {
   font-family: @font-bold;
@@ -34,7 +35,49 @@ p {
 
 .container {
   width: ~"calc(100% - 60px)";
-  margin: 30px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.number {
+  width: 20px;
+  height: 20px;
+  background-color: @primary;
+  color: #FFF;
+  text-align: center;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 20px;
+  margin- right: 10px;
+}
+
+.avatarSmall {
+  width: 124px;
+  height: 124px;
+  border-radius: 125px;
+}
+
+.top {
+  box-shadow: @boxShadow;
+  z-index: 9;
+  position: relative;
+}
+
+.content {
+  min-height: 100%;
+  margin-bottom: 84px;
+  .greyBg {
+    background-color: @grey;
+  }
+  #rules {
+    .item {
+      display: flex;
+      margin-bottom: 15px;
+      .left { width: 40px;}
+      .right { width: ~"calc(100% - 40px)";}
+    }
+  }
 }
 
 .footer {
