@@ -1,4 +1,4 @@
-import { LOGIN_USER, GAME_STATUS } from './types.js';
+import { LOGIN_USER, GAME_STATUS, SCORE_STATUS } from './types.js';
 import * as firebase from "firebase";
 
 export const login = (user) => (dispatch, ownProps) => {
@@ -40,5 +40,11 @@ export const login = (user) => (dispatch, ownProps) => {
 export function gameStatus(status) {
   return function(dispatch) {
     dispatch({ type: GAME_STATUS, payload: status });
+  }
+}
+
+export function scoreStatus(score) {
+  return function(dispatch) {
+    dispatch({ type: SCORE_STATUS, payload: score });
   }
 }

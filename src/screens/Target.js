@@ -6,8 +6,8 @@ export default class Target extends Component {
   }
   render() {
     return (
-      <div>
-        <img className="avatarSmall centerImage" src={this.props.props.fbPhotoUrl} alt='profilePicture' />
+      <div className='container bgWhite'>
+        <img className="avatarBig centerImage" src={this.props.user.fbPhotoUrl} alt='profilePicture' />
         <p className='center'>Make him/her say</p>
         <h1>-Word-</h1>
       </div>

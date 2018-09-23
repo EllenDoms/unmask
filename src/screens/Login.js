@@ -8,14 +8,15 @@ import FooterBtn from '../components/FooterBtn';
 class Login extends Component {
   login() {
     var provider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth().signInWithPopup(provider)
+    //firebase.auth().signInWithPopup(provider)
+    firebase.auth().signInWithRedirect(provider)
   }
   render() {
     return (
       <div className='content'>
-        <div className='container'>
+        <div className='container bgWhite'>
           <h1>Montagues<div className="small">vs</div>Capulets</h1>
-          <p>To play the game: give the password and use your facebook account to login (don’t worry, we won’t use it for evil).</p>
+          <p className='center vertCent'>To play the game: give the password and use your facebook account to login (don’t worry, we won’t use it for evil).</p>
         </div>
         <FooterBtn text="Login with Facebook" onClick={() => this.login()} />
       </div>

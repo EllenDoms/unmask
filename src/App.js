@@ -11,7 +11,7 @@ import Login from './screens/Login';
 import Game from './screens/Game';
 
 class App extends Component {
-  componentWillMount() {
+  componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {
         this.props.login(user)

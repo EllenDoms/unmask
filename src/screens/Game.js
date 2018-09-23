@@ -3,6 +3,7 @@ import FooterNav from '../components/FooterNav';
 import { connect } from "react-redux";
 
 import { gameStatus } from '../actions';
+import { scoreStatus } from '../actions';
 
 import * as firebase from 'firebase';
 
@@ -18,9 +19,11 @@ class Game extends Component {
     this.state = { active: "rules" };
   }
   componentWillMount() {
-    var gameStatus = firebase.database().ref('CodeCapulets/game');
-    gameStatus.on('value', snapshot => {
+    firebase.database().ref('CodeCapulets/game').on('value', snapshot => {
       this.props.gameStatus(snapshot.val());
+    });
+    firebase.database().ref('CodeCapulets/score').on('value', snapshot => {
+      this.props.scoreStatus(snapshot.val());
     });
 
   }
@@ -30,10 +33,10 @@ class Game extends Component {
   }
   renderpage(page){
     switch(page) {
-      case 'target': return <Target props={this.props.user} />
-      case 'score': return <Score props={this.props.user} />
-      case 'die': return <Die props={this.props.user} />
-      default: return <Rules props={this.props.user} />
+      case 'target': return <Target user={this.props.user} />
+      case 'score': return <Score user={this.props.user} score={this.props.score} />
+      case 'die': return <Die user={this.props.user} />
+      default: return <Rules user={this.props.user} />
     }
   }
   setActive = (activePage) => {
@@ -62,7 +65,8 @@ function mapStateToProps(state) {
     loggedIn: state.data.loggedIn,
     user: state.data.user,
     game: state.data.game,
+    score: state.data.score,
   };
 }
 
-export default connect(mapStateToProps, { gameStatus })(Game);
+export default connect(mapStateToProps, { gameStatus, scoreStatus })(Game);

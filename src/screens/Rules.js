@@ -15,11 +15,11 @@ export default class Rules extends Component {
     return (
       <div className='content'>
         <div className='top container'>
-          <img className="avatarSmall centerImage" src={this.props.props.fbPhotoUrl} alt='profilePicture' />
+          <img className="avatarSmall centerImage" src={this.props.user.fbPhotoUrl} alt='profilePicture' />
           <p className='center'>You are a</p>
-          <h1>{this.props.props.family}</h1>
+          <h1>{this.props.user.family}</h1>
         </div>
-        <div id='rules' className='greyBg container'>
+        <div id='rules' className='container'>
           {ruleItems.map((rule, key) => {
             let number = key+1
             return(
