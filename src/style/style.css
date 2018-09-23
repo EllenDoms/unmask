@@ -24,9 +24,17 @@ p {
   letter-spacing: 0;
   line-height: 24px;
 }
+.btn {
+  background-color: #E5376E;
+  color: #FFF;
+  height: 48px;
+  width: 100%;
+  line-height: 48px;
+  border: none;
+}
 .container {
   width: calc(100% - 60px);
-  padding: 30px;
+  padding: 15px 30px;
   display: flex;
   flex-direction: column;
 }
@@ -45,6 +53,7 @@ p {
   width: 124px;
   height: 124px;
   border-radius: 125px;
+  margin: 20px;
 }
 .top {
   box-shadow: 10px 0 10px 0 rgba(0, 0, 0, 0.15);
@@ -77,11 +86,14 @@ p {
   background-color: #FFF;
   box-shadow: 10px 0 10px 0 rgba(0, 0, 0, 0.15);
 }
-.footer button {
+.footer.button {
+  height: 112px;
+}
+.footer .nav-item {
   width: 25%;
   height: 100%;
   flex-direction: row;
 }
-.footer button.active {
+.footer .nav-item.active {
   color: #E5376E;
 }

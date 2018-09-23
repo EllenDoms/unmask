@@ -12,9 +12,11 @@ class Login extends Component {
   }
   render() {
     return (
-      <div>
-        <h1>Montagues<div className="small">vs</div>Capulets</h1>
-        <p>To play the game: give the password and use your facebook account to login (don’t worry, we won’t use it for evil).</p>
+      <div className='content'>
+        <div className='container'>
+          <h1>Montagues<div className="small">vs</div>Capulets</h1>
+          <p>To play the game: give the password and use your facebook account to login (don’t worry, we won’t use it for evil).</p>
+        </div>
         <FooterBtn text="Login with Facebook" onClick={() => this.login()} />
       </div>
     )

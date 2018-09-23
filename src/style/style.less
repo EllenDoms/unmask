@@ -33,9 +33,19 @@ p {
   line-height: 24px;
 }
 
+.btn {
+  width: 100%;
+  background-color: @primary;
+  color: #FFF;
+  height: 48px;
+  width: 100%;
+  line-height: 48px;
+  border: none;
+}
+
 .container {
   width: ~"calc(100% - 60px)";
-  padding: 30px;
+  padding: 15px 30px;
   display: flex;
   flex-direction: column;
 }
@@ -56,6 +66,7 @@ p {
   width: 124px;
   height: 124px;
   border-radius: 125px;
+  margin: 20px;
 }
 
 .top {
@@ -88,7 +99,8 @@ p {
   height: 83px;
   background-color: #FFF;
   box-shadow: @boxShadow;
-  button {
+  &.button { height: 112px; }
+  .nav-item {
     width: 25%;
     height: 100%;
     flex-direction: row;
