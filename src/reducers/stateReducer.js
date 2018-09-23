@@ -10,7 +10,7 @@ const initialState = {
     alive: true,
     targets: [],
   },
-  game: false,
+  game: true,
   score: {
     capulets: '',
     montagues: ''

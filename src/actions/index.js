@@ -1,9 +1,7 @@
-import { LOGIN_USER } from './types.js';
+import { LOGIN_USER, GAME_STATUS } from './types.js';
 import * as firebase from "firebase";
-import { withRouter } from 'react-router-dom';
 
-
-export const login = (user) => (dispatch, ownProps) => {  
+export const login = (user) => (dispatch, ownProps) => {
   let params = {
     id: user.uid,
     fbPhotoUrl: user.photoURL,
@@ -17,8 +15,8 @@ export const login = (user) => (dispatch, ownProps) => {
       }
     ],
   }
-
   firebase.database().ref('/CodeCapulets/people/' + user.uid).once('value').then(function(snapshot) {
+
     if (snapshot.val() !== null) {
       dispatch({
         type: LOGIN_USER,
@@ -38,3 +36,9 @@ export const login = (user) => (dispatch, ownProps) => {
 
 
 };
+
+export function gameStatus(status) {
+  return function(dispatch) {
+    dispatch({ type: GAME_STATUS, payload: status });
+  }
+}

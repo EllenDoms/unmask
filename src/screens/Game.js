@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import FooterNav from '../components/FooterNav';
 import { connect } from "react-redux";
-import { login } from '../actions'
+
+import { gameStatus } from '../actions';
 
 import * as firebase from 'firebase';
-import { firebaseConfig } from '../config/firebase';
 
+import Waiting from './Waiting';
 import Rules from './Rules';
 import Target from './Target';
 import Score from './Score';
@@ -15,43 +16,53 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = { active: "rules" };
-    this.setActive = this.setActive.bind(this)
   }
   componentWillMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user != null) {
-        this.props.login(user)
-      }
+    var gameStatus = firebase.database().ref('CodeCapulets/game');
+    gameStatus.on('value', snapshot => {
+      this.props.gameStatus(snapshot.val());
     });
+
+  }
+  startGame() {
+    // only once: start game logic
+    // this.props.startGame()
   }
   renderpage(page){
     switch(page) {
-      case 'rules': return <Rules props={this.props.user} />
       case 'target': return <Target props={this.props.user} />
       case 'score': return <Score props={this.props.user} />
       case 'die': return <Die props={this.props.user} />
+      default: return <Rules props={this.props.user} />
     }
   }
-  setActive(activePage) {
+  setActive = (activePage) => {
     this.setState({active: activePage})
   }
   render() {
-    // if game = false (not started): go to waiting page
-    return (
-      <div>
-        {this.renderpage(this.state.active)}
-        <FooterNav active={this.state.active} action={this.setActive} />
-      </div>
-    )
+    if(this.props.game == false) {
+      // if game = false (not started): go to waiting page
+      return (
+        <Waiting />
+      )
+    } else {
+      this.startGame()
+      return (
+        <div>
+          {this.renderpage(this.state.active)}
+          <FooterNav active={this.state.active} action={this.setActive} />
+        </div>
+      )
+    }
   }
 }
 
 function mapStateToProps(state) {
-  console.log(state.data.user)
   return {
     loggedIn: state.data.loggedIn,
-    user: state.data.user
+    user: state.data.user,
+    game: state.data.game,
   };
 }
 
-export default connect(mapStateToProps, {login})(Game);
+export default connect(mapStateToProps, { gameStatus })(Game);

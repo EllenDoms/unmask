@@ -1,24 +1,40 @@
 import React, { Component } from 'react';
 import './style/style.css';
 import { connect } from "react-redux";
-import { HashRouter, Route, Switch } from 'react-router-dom';
 
-import requireAuth from "./auth/requireAuth";
+import { login } from './actions'
+
+import * as firebase from 'firebase';
+import { firebaseConfig } from './config/firebase';
+
 import Login from './screens/Login';
 import Game from './screens/Game';
 
-export default class App extends Component {
-
+class App extends Component {
+  componentWillMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user != null) {
+        this.props.login(user)
+      }
+    });
+  }
   render() {
-    return (
-      <HashRouter>
-        <div id='page'>
-          <Switch>
-            <Route exact path="/" component={Login} />
-            <Route exact path="/game" component={Game} />
-          </Switch>
-        </div>
-      </HashRouter>
-    );
+    if (this.props.loggedIn == true) {
+      return(
+        <Game />
+      )
+    } else {
+      return (
+        <Login />
+      );
+    }
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    loggedIn: state.data.loggedIn
+  };
+}
+
+export default connect(mapStateToProps, { login })(App);

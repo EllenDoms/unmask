@@ -15,7 +15,7 @@ export default class Rules extends Component {
     return (
       <div className='content'>
         <div className='top container'>
-          <img className="avatarSmall centerImage" src={this.props.props.fbPhotoUrl} />
+          <img className="avatarSmall centerImage" src={this.props.props.fbPhotoUrl} alt='profilePicture' />
           <p className='center'>You are a</p>
           <h1>{this.props.props.family}</h1>
         </div>
