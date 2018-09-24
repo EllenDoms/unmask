@@ -9,7 +9,12 @@ class Login extends Component {
   login() {
     var provider = new firebase.auth.FacebookAuthProvider();
     //firebase.auth().signInWithPopup(provider)
-    firebase.auth().signInWithRedirect(provider)
+    firebase.auth().signInWithRedirect(provider).then(function(result) {
+      var user = result.user;
+      this.props.login(user)
+    }).catch(function(error) {
+      console.log(error)
+    });
   }
   render() {
     return (

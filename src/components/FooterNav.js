@@ -1,6 +1,17 @@
 import React, { Component } from 'react';
 
 export default class FooterNav extends Component {
+  renderAdmin() {
+    let active = this.props.active;
+    if(this.props.admin) {
+      return(
+        <button id="admin" className={active == "admin" ? 'nav-item active' : 'nav-item'} onClick={() => this.props.action('admin')}>
+          <div className="material-icons">settings</div>
+          <div className="label">Admin</div>
+        </button>
+      )
+    }
+  }
   render() {
     let active = this.props.active;
     return (
@@ -21,6 +32,7 @@ export default class FooterNav extends Component {
           <div className="material-icons">close</div>
           <div className="label">I died</div>
         </button>
+        {this.renderAdmin()}
       </div>
     )
   }
