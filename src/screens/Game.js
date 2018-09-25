@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import FooterNav from '../components/FooterNav';
 import { connect } from "react-redux";
+import FooterNav from '../components/FooterNav';
+import FooterSmallNav from '../components/FooterSmallNav';
 
-import { gameStatus } from '../actions';
-import { scoreStatus } from '../actions';
+import { scoreStatus, userStatus } from '../actions';
 
 import * as firebase from 'firebase';
 
@@ -20,18 +20,29 @@ class Game extends Component {
     this.state = { active: "rules" };
   }
   componentWillMount() {
+    // listener Score
     firebase.database().ref('CodeCapulets/score').on('value', snapshot => {
       this.props.scoreStatus(snapshot.val());
     });
-
+    // Listener user
+    firebase.database().ref('CodeCapulets/people/' + this.props.user.id).on('value', snapshot => {
+      console.log(snapshot.val());
+      this.props.userStatus(snapshot.val());
+    });
   }
   renderpage(page){
     switch(page) {
       case 'target': return <Target user={this.props.user} />
       case 'score': return <Score user={this.props.user} score={this.props.score} />
-      case 'die': return <Die user={this.props.user} />
+      case 'die': return <Die user={this.props.user} score={this.props.score} />
       case 'admin': return <Admin user={this.props.user} />
       default: return <Rules user={this.props.user} />
+    }
+  }
+  renderpageSmall(page){
+    switch(page) {
+      case 'score': return <Score user={this.props.user} score={this.props.score} />
+      default: return <Admin user={this.props.user} />
     }
   }
   setActive = (activePage) => {
@@ -45,18 +56,39 @@ class Game extends Component {
       } else {
         return <Admin user={this.props.user} />
       }
-    } else {
+    } else if(this.props.game && this.props.user.alive) {
+      // game started and alive
       return (
         <div>
           {this.renderpage(this.state.active)}
           <FooterNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
         </div>
       )
+    } else {
+      // death.
+      if(!this.props.user.admin) {
+        return (
+          <div>
+            <Score user={this.props.user} score={this.props.score} />
+            {/* <FooterBtn text="Logout" onClick={() => this.logout()} /> */}
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            {this.renderpageSmall(this.state.active)}
+            <FooterSmallNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
+            {/* <FooterBtn text="Logout" onClick={() => this.logout()} /> */}
+          </div>
+        )
+      }
+
     }
   }
 }
 
 function mapStateToProps(state) {
+  console.log(state.data.user)
   return {
     loggedIn: state.data.loggedIn,
     user: state.data.user,
@@ -65,4 +97,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { scoreStatus })(Game);
+export default connect(mapStateToProps, { scoreStatus, userStatus })(Game);

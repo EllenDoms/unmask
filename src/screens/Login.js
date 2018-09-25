@@ -8,7 +8,6 @@ import FooterBtn from '../components/FooterBtn';
 class Login extends Component {
   login() {
     var provider = new firebase.auth.FacebookAuthProvider();
-    //firebase.auth().signInWithPopup(provider)
     firebase.auth().signInWithRedirect(provider).then(function(result) {
       var user = result.user;
       this.props.login(user)
@@ -21,7 +20,7 @@ class Login extends Component {
       <div className='content'>
         <div className='container bgWhite'>
           <h1>Montagues<div className="small">vs</div>Capulets</h1>
-          <p className='center vertCent'>To play the game: give the password and use your facebook account to login (don’t worry, we won’t use it for evil).</p>
+          <p className='center vertCent'>To play the game: use your facebook account to enroll in the game (don’t worry, we won’t use it for evil). But be carefull, after this page: There is NO way back... Moehahaha.</p>
         </div>
         <FooterBtn text="Login with Facebook" onClick={() => this.login()} />
       </div>

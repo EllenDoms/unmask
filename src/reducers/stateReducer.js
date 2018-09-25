@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOADING, GAME_STATUS, SCORE_STATUS } from "../actions/types";
+import { LOGIN_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS } from "../actions/types";
 
 const initialState = {
   loggedIn: false,
@@ -9,7 +9,8 @@ const initialState = {
     photoUrl: '',
     name: '',
     family: '',
-    alive: true,
+    targettedBy: [],
+    alive: '',
     targets: [],
   },
   game: '',
@@ -29,6 +30,8 @@ export default function stateReducer (state = initialState, action) {
       return { ...state, game: action.payload }
     case SCORE_STATUS :
       return { ...state, score: action.payload }
+    case USER_STATUS :
+      return { ...state, user: action.payload }
     default:
       return state;
   }

@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 
 import { startGame, stopGame } from '../actions'
 
-
 class Admin extends Component {
   render() {
     if(!this.props.game) {
@@ -28,7 +27,6 @@ class Admin extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.data.game)
   return {
     game: state.data.game
   };

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import './style/style.css';
 import { connect } from "react-redux";
 
-import { login } from './actions'
-import { gameStatus } from './actions'
-import { stopLoading } from './actions'
+import { login, gameStatus, stopLoading } from './actions';
 
 import * as firebase from 'firebase';
 import { firebaseConfig } from './config/firebase';
@@ -16,13 +14,13 @@ import Admin from './screens/Admin';
 
 class App extends Component {
   componentDidMount() {
-    // check if logged in
+    // listener logged in
     firebase.auth().onAuthStateChanged((user) => {
       if (user != null) {
         this.props.login(user)
       }
     });
-    // check game status and stop loading
+    // listener game status and stop loading
     firebase.database().ref('CodeCapulets/game').on('value', snapshot => {
       this.props.gameStatus(snapshot.val());
       this.props.stopLoading();
