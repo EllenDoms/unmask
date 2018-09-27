@@ -6,9 +6,9 @@ export default class Score extends Component {
     return (
       <div className="content">
         <div className='top container'>
-          <img className="avatarSmall centerImage" src={this.props.user.fbPhotoUrl} alt='profilePicture' />
+          <img className="avatar avatarSmall centerImage" src={this.props.user.selfieUrl} alt='profilePicture' />
           <h2>{wins}</h2>
-          <p className='center'>Wins</p>
+          <p className='center'>Wins for you</p>
         </div>
         <div id="score" className='greyBg container'>
           <div className='left'>

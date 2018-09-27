@@ -22,7 +22,7 @@ class Login extends Component {
           <h1>Montagues<div className="small">vs</div>Capulets</h1>
           <p className='center vertCent'>To play the game: use your facebook account to enroll in the game (don’t worry, we won’t use it for evil). But be carefull, after this page: There is NO way back... Moehahaha.</p>
         </div>
-        <FooterBtn text="Login with Facebook" onClick={() => this.login()} />
+        <FooterBtn text="Login with Facebook" click={() => this.login()} />
       </div>
     )
 

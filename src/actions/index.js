@@ -1,25 +1,28 @@
-import { LOGIN_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS } from './types.js';
+import { LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS } from './types.js';
 import * as firebase from "firebase";
 
 const game = "CodeCapulets"
 
-export const login = (user) => (dispatch, ownProps) => {
+export const login = (user) => (dispatch) => {
+  console.log(user)
   let params = {
     id: user.uid,
     admin: false,
     fbPhotoUrl: user.photoURL,
     name: user.displayName,
     family: '',
+    selfie: '',
     targettedBy: [],
     alive: true,
     targets: [
-      {uid: user.uid,
-      word: '',
-      success: false
+      {
+        uid: user.uid,
+        word: '',
+        success: false
       }
     ],
   }
-  firebase.database().ref('/CodeCapulets/people/' + user.uid).once('value')
+  firebase.database().ref('/' + game + '/people/' + user.uid).once('value')
   .then(function(snapshot) {
     if (snapshot.val() !== null) {
       dispatch({
@@ -28,7 +31,7 @@ export const login = (user) => (dispatch, ownProps) => {
         loggedIn: true,
       });
     } else {
-      firebase.database().ref('/CodeCapulets/people/' + user.uid).update(params);
+      firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
       dispatch({
         type: LOGIN_USER,
         user: params,
@@ -37,13 +40,38 @@ export const login = (user) => (dispatch, ownProps) => {
     }
   })
 };
-
+export const logout = () => (dispatch) => {
+  firebase.auth().signOut().then(function() {
+    console.log("logged out");
+    dispatch({
+      type: LOGOUT_USER,
+      loggedIn: false,
+    });
+  }).catch(function(error) { console.log(error) });
+}
 export function stopLoading() {
   return function(dispatch) {
     dispatch({
       type: LOADING,
       payload: false
     });
+  }
+}
+
+export function uploadSelfie(upload) {
+  return function(dispatch, getState) {
+    let userId = getState().data.user.id
+    console.log(upload)
+
+    // Storing in user folder in picture folder
+    firebase.storage().ref(game + '/' + userId).put(upload)
+      .then(function(snapshot) {
+        console.log('Uploaded a selfie!');
+        firebase.storage().ref(game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
+          console.log(selfieUrl)
+          firebase.database().ref(game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
+        }).catch(function(error) {console.log(error) });
+      }).catch(function(error) {console.log(error) });
   }
 }
 
@@ -87,7 +115,6 @@ export function startGame(start) {
           word: '',
           fbPhotoUrl: ''
         }
-
         // even and odd people
         if(i % 2 == 0) {
           firebase.database().ref('/CodeCapulets/people/' + selectedID + '/family').set('capulet');

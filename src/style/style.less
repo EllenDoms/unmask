@@ -1,9 +1,10 @@
 out: style.css
 
-@primary : #E5376E;
+@primary : #D4AF37;
 @secondary : #383B41;
 @font: 'Roboto', sans-serif;
 @font-bold: 'Roboto-Black', sans-serif;
+@fontSpecial: 'Cinzel Decorative', cursive;
 @grey: #F6F6F6;
 @boxShadow: 10px 0 10px 0 rgba(0,0,0,0.15);
 @transition: all 0.2s ease-out;
@@ -26,8 +27,8 @@ body { background-color: @grey };
 }
 
 h1 {
-  font-family: @font-bold;
-  font-size: 50px;
+  font-family: @fontSpecial;
+  font-size: 40px;
   color: @primary;
   letter-spacing: 0;
   text-align: center;
@@ -66,6 +67,7 @@ button {
   width: 100%;
   line-height: 48px;
   border: none;
+  font-size: 14px;
 }
 
 .container {
@@ -90,18 +92,20 @@ button {
   margin-top: 12px;
 }
 
-.avatarSmall {
-  width: 124px;
-  height: 124px;
-  border-radius: 125px;
+.avatar {
+  object-fit: cover;
   margin: 20px;
-}
+  &.avatarSmall {
+    width: 124px;
+    height: 124px;
+    border-radius: 125px;
+  }
 
-.avatarBig {
-  width: 242px;
-  height: 242px;
-  border-radius: 242px;
-  margin: 20px;
+  &.avatarBig {
+    width: 242px;
+    height: 242px;
+    border-radius: 242px;
+  }
 }
 
 .top {

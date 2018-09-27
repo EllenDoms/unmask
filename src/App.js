@@ -9,6 +9,7 @@ import { firebaseConfig } from './config/firebase';
 
 import Loading from './screens/Loading';
 import Login from './screens/Login';
+import Selfie from './screens/Selfie';
 import Game from './screens/Game';
 import Admin from './screens/Admin';
 
@@ -16,7 +17,7 @@ class App extends Component {
   componentDidMount() {
     // listener logged in
     firebase.auth().onAuthStateChanged((user) => {
-      if (user != null) {
+      if (this.props.loggedIn === false) {
         this.props.login(user)
       }
     });
@@ -33,6 +34,8 @@ class App extends Component {
     } else {
       if (this.props.loggedIn === false) {
         return <Login />
+      } else if (!this.props.user.selfieUrl || this.props.user.selfieUrl === "") {
+        return <Selfie />
       } else {
         return <Game />
       }
@@ -41,11 +44,12 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state.data)
   return {
     user: state.data.user,
     game: state.data.game,
     loggedIn: state.data.loggedIn,
-    loading: state.data.loading
+    loading: state.data.loading,
   };
 }
 

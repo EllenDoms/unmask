@@ -12,7 +12,7 @@ export default class Target extends Component {
     if(activeTarget) {
       return (
         <div className='container bgWhite'>
-          <img className="avatarBig centerImage" src={activeTarget.fbPhotoUrl} alt='profilePicture' />
+          <img className="avatar avatarBig centerImage" src={activeTarget.selfieUrl} alt='profilePicture' />
           <p className='center'>Make <b>{activeTarget.name}</b> say</p>
           <h1>{activeTarget.word}</h1>
         </div>

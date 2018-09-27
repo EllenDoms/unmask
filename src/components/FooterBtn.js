@@ -5,7 +5,7 @@ export default class FooterBtn extends Component {
     return (
       <div className="footer button">
         <div className='container'>
-          <button className="btn" onClick={this.props.onClick}>{this.props.text}</button>
+          <button className="btn" onClick={this.props.click}>{this.props.text}</button>
         </div>
       </div>
     )
