@@ -16,8 +16,8 @@ const initialState = {
   },
   game: '',
   score: {
-    capulets: '',
-    montagues: ''
+    capulet: '',
+    montague: ''
   },
 };
 

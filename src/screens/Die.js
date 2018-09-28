@@ -12,8 +12,8 @@ class Die extends Component {
         <h1>Did you die?</h1>
         <p className='center'>Someone tricked you into saying a word and informed you that you are dead? <br/> There is no way back. So be sure before you press the button.</p>
         <button className='btn' onClick={() => this.props.iDied(user.id)}>I died!</button>
-        <p>Or do you just want to logout?</p>
-        <button className='btn' onClick={() => this.props.logout()}>Logout</button>
+        <p className='center'>Or do you just want to logout?</p>
+        <button className='btn btnSec' onClick={() => this.props.logout()}>Logout</button>
       </div>
     )
   }

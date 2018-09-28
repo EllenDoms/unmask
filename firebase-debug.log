@@ -1,0 +1,109 @@
+[debug] [2018-09-28T13:40:18.168Z] ----------------------------------------------------------------------
+[debug] [2018-09-28T13:40:18.170Z] Command:       /usr/local/bin/node /usr/local/bin/firebase deploy
+[debug] [2018-09-28T13:40:18.170Z] CLI Version:   4.2.1
+[debug] [2018-09-28T13:40:18.170Z] Platform:      darwin
+[debug] [2018-09-28T13:40:18.170Z] Node Version:  v8.10.0
+[debug] [2018-09-28T13:40:18.170Z] Time:          Fri Sep 28 2018 15:40:18 GMT+0200 (CEST)
+[debug] [2018-09-28T13:40:18.170Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-09-28T13:40:18.181Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-09-28T13:40:18.181Z] > authorizing via signed-in user
+[debug] [2018-09-28T13:40:18.183Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-09-28T13:40:18.184Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+
+[debug] [2018-09-28T13:40:18.336Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:18.353Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/unmask-50759  
+ 
+[debug] [2018-09-28T13:40:19.004Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'unmask-50759'...
+[info] 
+[info] i  deploying functions, hosting
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] ✔  functions: Finished running predeploy script.
+[debug] [2018-09-28T13:40:21.745Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "~6.0.0",
+    "firebase-functions": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^4.12.0",
+    "eslint-plugin-promise": "^3.6.0"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2018-09-28T13:40:21.745Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/unmask-50759?view=CONSUMER_VIEW  
+ 
+[debug] [2018-09-28T13:40:21.746Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/unmask-50759?view=CONSUMER_VIEW  
+ 
+[debug] [2018-09-28T13:40:23.016Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2018-09-28T13:40:23.029Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:23.030Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/unmask-50759  
+ 
+[debug] [2018-09-28T13:40:23.814Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:23.814Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/285754494268:getServerAppConfig  
+ 
+[debug] [2018-09-28T13:40:24.024Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:24.026Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/unmask-50759/versions  
+
+[debug] [2018-09-28T13:40:25.565Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2018-09-28T13:40:25.567Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/unmask-50759/configs  
+ 
+[debug] [2018-09-28T13:40:25.918Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (52.37 KB) for uploading
+[debug] [2018-09-28T13:40:26.088Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/unmask-50759/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2018-09-28T13:40:26.433Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:26.434Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-35077eaf-5138-4a59-ba6d-6d1c9669114e/51a0590d-03df-44e2-a874-e6507ff78476.zip?GoogleAccessId=service-285754494268@gcf-admin-robot.iam.gserviceaccount.com&Expires=1538143826&Signature=eIM52FNfGuqAcLznpCarzzXOP0yNFBdK2d6pxBudMV%2Bk0v9C928cGd%2FglqnlyKmAC23YpsjDqFnXFTPvnsbc8rQulGSKTixjAkomZULNcMOe%2FLwAYgji%2Ft0o2pZB8f8pDGPGQkTkeXLP1UUe2%2B9N8vwwJkUZERH2o0dWRkAyVv1V2ZE7OM6lWbJZiOnDXGDtr7yEG5osO5oDjr2nicEy293miANL1rSPNToDiiephSCnzqwzozVZNW%2BaYjKdE7TR7hJBJO5rMbWZZQuJH60R%2B%2FqLxQ2hrgRZzhayIszIvZ5uoroqkZtAIQq5K8WOxEJC5L2GX7eO84e4vF9eL3tknA%3D%3D  
+
+[debug] [2018-09-28T13:40:26.906Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting[unmask-50759]: beginning deploy...
+[info] i  hosting[unmask-50759]: found 15 files in build
+[debug] [2018-09-28T13:40:27.695Z] [hosting] hash cache [YnVpbGQ] stored for 15 files
+[debug] [2018-09-28T13:40:27.696Z] [hosting][hash queue][FINAL]
+[debug] [2018-09-28T13:40:27.696Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/unmask-50759/versions/ca7087057bb983d1:populateFiles  
+ <request body omitted>
+[debug] [2018-09-28T13:40:28.904Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:28.910Z] [hosting][populate queue][FINAL]
+[debug] [2018-09-28T13:40:28.910Z] [hosting] uploads queued: 7
+[debug] [2018-09-28T13:40:31.391Z] [hosting][upload queue][FINAL]
+[info] ✔  hosting[unmask-50759]: file upload complete
+[debug] [2018-09-28T13:40:31.392Z] [hosting] deploy completed after 4485ms
+[debug] [2018-09-28T13:40:31.482Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/unmask-50759/locations/-/functions  
+ 
+[debug] [2018-09-28T13:40:32.050Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating Node.js 6 function isdead(us-central1)...
+[debug] [2018-09-28T13:40:32.053Z] Trigger is:  {"httpsTrigger":{}}
+[debug] [2018-09-28T13:40:32.054Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/unmask-50759/locations/us-central1/functions/isdead 
+query params: {"updateMask":"sourceUploadUrl,name,labels,httpsTrigger"} 
+
+[debug] [2018-09-28T13:40:32.465Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:32.467Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/unmask-50759/locations/-/functions  
+ 
+[debug] [2018-09-28T13:40:33.013Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:33.015Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dW5tYXNrLTUwNzU5L3VzLWNlbnRyYWwxL2lzZGVhZC9nX1dOWS1icmp6cw  
+ 
+[debug] [2018-09-28T13:40:33.234Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:35.236Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dW5tYXNrLTUwNzU5L3VzLWNlbnRyYWwxL2lzZGVhZC9nX1dOWS1icmp6cw  
+ 
+[debug] [2018-09-28T13:40:35.443Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:37.448Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dW5tYXNrLTUwNzU5L3VzLWNlbnRyYWwxL2lzZGVhZC9nX1dOWS1icmp6cw  
+ 
+[debug] [2018-09-28T13:40:37.832Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-28T13:40:39.836Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/dW5tYXNrLTUwNzU5L3VzLWNlbnRyYWwxL2lzZGVhZC9nX1dOWS1icmp6cw  
+ 
+[debug] [2018-09-28T13:40:40.062Z] <<< HTTP RESPONSE 200

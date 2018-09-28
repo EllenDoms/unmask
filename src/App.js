@@ -11,14 +11,15 @@ import Loading from './screens/Loading';
 import Login from './screens/Login';
 import Selfie from './screens/Selfie';
 import Game from './screens/Game';
+import TooLate from './screens/TooLate';
 import Admin from './screens/Admin';
+import RegisterGame from './screens/RegisterGame';
 
 class App extends Component {
   componentDidMount() {
     // listener logged in
     firebase.auth().onAuthStateChanged((user) => {
-      if (this.props.loggedIn === false && !this.props.user.id) {
-        console.log(user);
+      if (!this.props.loggedIn && !this.props.user.id) {
         this.props.login(user)
       }
     });
@@ -27,16 +28,20 @@ class App extends Component {
       this.props.gameStatus(snapshot.val());
       this.props.stopLoading();
     });
-
   }
   render() {
-    if(this.props.loading === true) {
+    let { loading, loggedIn, game, user }  = this.props
+    if(loading === true) {
       return <Loading />
     } else {
-      if (this.props.loggedIn === false) {
+      if (loggedIn === false) {
         return <Login />
-      } else if (!this.props.user.selfieUrl || this.props.user.selfieUrl === "") {
+      } else if (!user.selfieUrl || user.selfieUrl === "") {
         return <Selfie />
+      } else if (game && !user.enrolled) {
+        return <TooLate />
+      } else if(user.enrolled != true) {
+        return <RegisterGame />
       } else {
         return <Game />
       }
@@ -45,7 +50,6 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.data)
   return {
     user: state.data.user,
     game: state.data.game,

@@ -26,7 +26,6 @@ class Game extends Component {
     });
     // Listener user
     firebase.database().ref('CodeCapulets/people/' + this.props.user.id).on('value', snapshot => {
-      console.log(snapshot.val());
       this.props.userStatus(snapshot.val());
     });
   }
@@ -49,46 +48,55 @@ class Game extends Component {
     this.setState({active: activePage})
   }
   render() {
-    if(!this.props.game) {
+    let { game, user, score } = this.props
+    if(!game) {
       // if game = false (not started): go to waiting page
-      if(!this.props.user.admin) {
-        return <Waiting user={this.props.user}  />
+      if(!user.admin) {
+        return <Waiting user={user}  />
       } else {
-        return <Admin user={this.props.user} />
+        return <Admin user={user} />
       }
-    } else if(this.props.game && this.props.user.alive) {
-      // game started and alive
-      return (
-        <div>
-          {this.renderpage(this.state.active)}
-          <FooterNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
-        </div>
-      )
-    } else {
-      // death.
-      if(!this.props.user.admin) {
-        return (
-          <div>
-            <Score user={this.props.user} score={this.props.score} />
-            {/* <FooterBtn text="Logout" onClick={() => this.logout()} /> */}
-          </div>
-        )
-      } else {
-        return (
-          <div>
-            {this.renderpageSmall(this.state.active)}
-            <FooterSmallNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
-            {/* <FooterBtn text="Logout" onClick={() => this.logout()} /> */}
-          </div>
-        )
-      }
+    } else if(game) {
+      // game started
+      if(user.alive) {
+        // alive
+        if(score.capulets === 0 || score.montagues === 0) {
+          return (
+            <div>
+              {this.renderpage("score")}
+            </div>
+          )
+        } else {
+          return (
+            <div>
+              {this.renderpage(this.state.active)}
+              <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
+            </div>
+          )
+        }
 
+      } else {
+        // death.
+        if(!user.admin) {
+          return (
+            <div>
+              <Score user={user} score={score} />
+            </div>
+          )
+        } else {
+          return (
+            <div>
+              {this.renderpageSmall(this.state.active)}
+              <FooterSmallNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
+            </div>
+          )
+        }
+      }
     }
   }
 }
 
 function mapStateToProps(state) {
-  console.log(state.data.user)
   return {
     loggedIn: state.data.loggedIn,
     user: state.data.user,

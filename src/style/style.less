@@ -68,16 +68,22 @@ button {
   line-height: 48px;
   border: none;
   font-size: 14px;
+  &.btnSec {
+    background-color: transparent;
+    color: @primary;
+    border: @primary 1px solid;
+  }
 }
 
 .container {
   width: ~"calc(100% - 60px)";
-  padding: 15px 30px;
+  padding: 40px 30px;
   display: flex;
   flex-direction: column;
+  &.bgWhite { background-color: #FFF; min-height: ~"calc(100vh - 80px)";}
 }
 
-.bgWhite { background-color: #FFF; min-height: 100vh;}
+
 
 .number {
   width: 20px;
@@ -95,6 +101,7 @@ button {
 .avatar {
   object-fit: cover;
   margin: 20px;
+  overflow: hidden;
   &.avatarSmall {
     width: 124px;
     height: 124px;
@@ -105,6 +112,26 @@ button {
     width: 242px;
     height: 242px;
     border-radius: 242px;
+  }
+
+  .avatarEmptyLabel {
+    background-color: @grey;
+    width: 100%;
+    .material-icons {
+      width: 100%;
+      text-align: center;
+      line-height: 124px;
+      color: @secondary;
+      opacity: 0.3;
+    }
+    .avatarEmpty {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+    }
   }
 }
 
@@ -142,7 +169,7 @@ button {
   height: 83px;
   background-color: #FFF;
   box-shadow: @boxShadow;
-  &.button { height: 112px; }
+  &.button {  height: 112px; .btn{margin-top: -15px;} }
   .nav-item {
     width: 25%;
     height: 100%;

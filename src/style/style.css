@@ -59,15 +59,20 @@ button {
   border: none;
   font-size: 14px;
 }
+.btn.btnSec {
+  background-color: transparent;
+  color: #D4AF37;
+  border: #D4AF37 1px solid;
+}
 .container {
   width: calc(100% - 60px);
-  padding: 15px 30px;
+  padding: 40px 30px;
   display: flex;
   flex-direction: column;
 }
-.bgWhite {
+.container.bgWhite {
   background-color: #FFF;
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
 }
 .number {
   width: 20px;
@@ -84,6 +89,7 @@ button {
 .avatar {
   object-fit: cover;
   margin: 20px;
+  overflow: hidden;
 }
 .avatar.avatarSmall {
   width: 124px;
@@ -94,6 +100,25 @@ button {
   width: 242px;
   height: 242px;
   border-radius: 242px;
+}
+.avatar .avatarEmptyLabel {
+  background-color: #F6F6F6;
+  width: 100%;
+}
+.avatar .avatarEmptyLabel .material-icons {
+  width: 100%;
+  text-align: center;
+  line-height: 124px;
+  color: #383B41;
+  opacity: 0.3;
+}
+.avatar .avatarEmptyLabel .avatarEmpty {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 .top {
   box-shadow: 10px 0 10px 0 rgba(0, 0, 0, 0.15);
@@ -136,6 +161,9 @@ button {
 }
 .footer.button {
   height: 112px;
+}
+.footer.button .btn {
+  margin-top: -15px;
 }
 .footer .nav-item {
   width: 25%;

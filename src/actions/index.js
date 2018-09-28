@@ -41,7 +41,6 @@ export const login = (user) => (dispatch) => {
 };
 export const logout = () => (dispatch) => {
   firebase.auth().signOut().then(function() {
-    console.log("logged out");
     dispatch({
       type: LOGOUT_USER,
       loggedIn: false,
@@ -60,20 +59,22 @@ export function stopLoading() {
 export function uploadSelfie(upload) {
   return function(dispatch, getState) {
     let userId = getState().data.user.id
-    console.log(upload)
 
     // Storing in user folder in picture folder
     firebase.storage().ref(game + '/' + userId).put(upload)
       .then(function(snapshot) {
-        console.log('Uploaded a selfie!');
         firebase.storage().ref(game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
-          console.log(selfieUrl)
           firebase.database().ref(game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
         }).catch(function(error) {console.log(error) });
       }).catch(function(error) {console.log(error) });
   }
 }
-
+export function registerGame() {
+  return function(dispatch, getState) {
+    let userId = getState().data.user.id;
+    firebase.database().ref(game + '/people/' + userId).child('enrolled').set(true);
+  }
+}
 export function gameStatus(status) {
   return function(dispatch) {
     dispatch({ type: GAME_STATUS, payload: status });
@@ -98,8 +99,16 @@ export function startGame(start) {
       const wordsData = snapshot.val().words;
 
       // convert stupid firebase objects to normal array
-      const peopleArray = Object.keys(peopleData).map((key) => peopleData[key])
       const wordsArray = Object.keys(wordsData).map((key) => wordsData[key])
+      const allPeopleArray = Object.keys(peopleData).map((key) => peopleData[key])
+
+      //array only with enrolled people
+      const peopleArray = [];
+      allPeopleArray.map(person => {
+        if(person.enrolled) {
+          peopleArray.push(person);
+        }
+      })
 
       // randomize array with people
       const randArray = peopleArray.sort((a, b) => {return 0.5 - Math.random()});
@@ -112,8 +121,9 @@ export function startGame(start) {
           uid: '',
           name: '',
           word: '',
-          fbPhotoUrl: ''
+          selfieUrl: ''
         }
+
         // even and odd people
         if(i % 2 == 0) {
           firebase.database().ref('/CodeCapulets/people/' + selectedID + '/family').set('capulet');
@@ -132,13 +142,13 @@ export function startGame(start) {
         firebase.database().ref('/CodeCapulets/people/' + selectedID + '/alive').set(true);
         // target word is random from array + add photo from target
         target.word = wordsArray[Math.floor(Math.random()*wordsArray.length)];
-        target.fbPhotoUrl = peopleData[target.uid].fbPhotoUrl;
+        target.selfieUrl = peopleData[target.uid].selfieUrl;
         target.name = peopleData[target.uid].name;
 
         // set target
         firebase.database().ref('/CodeCapulets/people/' + selectedID ).child("targets").set({0: target});
         firebase.database().ref('/CodeCapulets/people/' + target.uid ).child("targettedBy").set({ 0: selectedID});
-        console.log(peopleData[selectedID].family + ' ' + peopleData[selectedID].name + ' vs ' + peopleData[peopleData[selectedID].targets[0].uid].family + ' ' + peopleData[peopleData[selectedID].targets[0].uid].name)
+        console.log(peopleData[selectedID].family + ' ' + peopleData[selectedID].name + ' vs ' + peopleData[peopleData[selectedID].targets[0].uid].family + ' ' + target.name)
         // set score for capulets and montagues;
         let score = { 'capulet': capuletsScore, 'montague': montaguesScore };
         firebase.database().ref('/CodeCapulets/score').set(score);
@@ -161,7 +171,7 @@ export function iDied(uid) {
   return function(dispatch) {
     firebase.database().ref("/" + game).once('value').then(c => c.val()).then(snapshot => {
       const people = snapshot.people;
-      const peopleArray = Object.keys(people).map((key) => people[key])
+      const allPeopleArray = Object.keys(people).map((key) => people[key])
       const words = snapshot.words;
       const wordsArray = Object.keys(words).map((key) => words[key])
       const loser = people[uid];
@@ -169,6 +179,14 @@ export function iDied(uid) {
       const targets = loser.targets;
       const winnerIds = loser.targettedBy;
       let scoreFamily = snapshot.score[family];
+
+      //array only with enrolled people
+      const peopleArray = [];
+      allPeopleArray.map(person => {
+        if(person.enrolled) {
+          peopleArray.push(person);
+        }
+      })
 
       // *** Herbereken totals
       scoreFamily = scoreFamily - 1;
