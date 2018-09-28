@@ -58,29 +58,29 @@ class Game extends Component {
       }
     } else if(game) {
       // game started
-      if(user.alive) {
-        // alive
-        if(score.capulets === 0 || score.montagues === 0) {
-          return (
-            <div>
-              {this.renderpage("score")}
-            </div>
-          )
-        } else {
+
+      if(!user.admin) {
+        if(user.alive && score.capulet != 0 && score.montague != 0) {
           return (
             <div>
               {this.renderpage(this.state.active)}
               <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
             </div>
           )
-        }
-
-      } else {
-        // death.
-        if(!user.admin) {
-          return (
+        } else {
+          return(
             <div>
               <Score user={user} score={score} />
+            </div>
+          )
+        }
+      } else {
+        // admin
+        if(user.alive && score.capulet != 0 && score.montague != 0) {
+          return (
+            <div>
+              {this.renderpage(this.state.active)}
+              <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
             </div>
           )
         } else {
