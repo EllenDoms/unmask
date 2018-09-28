@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
 
-import { uploadSelfie } from '../actions';
+import { uploadSelfie, userStatus } from '../actions';
 
 class Selfie extends Component {
   componentWillMount() {
@@ -32,4 +32,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { uploadSelfie })(Selfie);
+export default connect(mapStateToProps, { uploadSelfie, userStatus })(Selfie);

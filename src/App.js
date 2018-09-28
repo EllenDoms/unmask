@@ -17,7 +17,8 @@ class App extends Component {
   componentDidMount() {
     // listener logged in
     firebase.auth().onAuthStateChanged((user) => {
-      if (this.props.loggedIn === false) {
+      if (this.props.loggedIn === false && !this.props.user.id) {
+        console.log(user);
         this.props.login(user)
       }
     });

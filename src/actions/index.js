@@ -4,7 +4,6 @@ import * as firebase from "firebase";
 const game = "CodeCapulets"
 
 export const login = (user) => (dispatch) => {
-  console.log(user)
   let params = {
     id: user.uid,
     admin: false,
