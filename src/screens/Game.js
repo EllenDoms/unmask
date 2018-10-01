@@ -24,10 +24,6 @@ class Game extends Component {
     firebase.database().ref('CodeCapulets/score').on('value', snapshot => {
       this.props.scoreStatus(snapshot.val());
     });
-    // Listener user
-    firebase.database().ref('CodeCapulets/people/' + this.props.user.id).on('value', snapshot => {
-      this.props.userStatus(snapshot.val());
-    });
   }
   renderpage(page){
     switch(page) {

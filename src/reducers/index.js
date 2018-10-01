@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import stateReducer from './stateReducer';
+import gameStateReducer from './gameStateReducer';
+import existsReducer from './existsReducer';
 
 const rootReducer = combineReducers({
-  data: stateReducer,
+  data: gameStateReducer,
+  exists: existsReducer,
 })
 
 export default rootReducer;

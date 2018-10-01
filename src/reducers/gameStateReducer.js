@@ -9,7 +9,7 @@ const initialState = {
     photoUrl: '',
     name: '',
     family: '',
-    selfie: '',
+    selfieUrl: '',
     targettedBy: [],
     alive: '',
     targets: [],
@@ -21,7 +21,7 @@ const initialState = {
   },
 };
 
-export default function stateReducer (state = initialState, action) {
+export default function gameStateReducer (state = initialState, action) {
   switch(action.type) {
     case LOGIN_USER :
       return { ...state, user: action.user, loggedIn: action.loggedIn}

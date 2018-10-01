@@ -1,36 +1,43 @@
-import { LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS } from './types.js';
+import { GAME_EXISTS, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS } from './types.js';
 import * as firebase from "firebase";
 
-const game = "CodeCapulets"
-
-export const login = (user) => (dispatch) => {
-  let params = {
-    id: user.uid,
-    admin: false,
-    fbPhotoUrl: user.photoURL,
-    name: user.displayName,
-    family: '',
-    selfie: '',
-    targettedBy: [],
-    alive: true,
-    targets: [
-      {
-        uid: user.uid,
-        word: '',
-        success: false
-      }
-    ],
+export function setGame(gameCode) {
+  return function(dispatch) {
+    firebase.database().ref('/'+ gameCode).once('value').then(snap => {
+      dispatch({ type: GAME_EXISTS, payload: gameCode });
+    });
   }
-  firebase.database().ref('/' + game + '/people/' + user.uid).once('value')
-  .then(function(snapshot) {
-    if (snapshot.val() !== null) {
+}
+
+export const login = (user) => (dispatch, getState) => {
+  firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).once('value')
+  .then(snapshot => snapshot.val()).then(val => {
+    console.log(snapshot.val())
+    if(val) {
       dispatch({
         type: LOGIN_USER,
-        user: snapshot.val(),
+        user: val,
         loggedIn: true,
       });
     } else {
-      firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
+      let params = {
+        id: user.uid,
+        admin: false,
+        fbPhotoUrl: user.photoURL,
+        name: user.displayName,
+        family: '',
+        selfieUrl: '',
+        targettedBy: [],
+        alive: true,
+        targets: [
+          {
+            uid: user.uid,
+            word: '',
+            success: false
+          }
+        ],
+      }
+      firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).update(params);
       dispatch({
         type: LOGIN_USER,
         user: params,
@@ -49,10 +56,7 @@ export const logout = () => (dispatch) => {
 }
 export function stopLoading() {
   return function(dispatch) {
-    dispatch({
-      type: LOADING,
-      payload: false
-    });
+    dispatch({ type: LOADING, payload: false });
   }
 }
 
@@ -61,10 +65,10 @@ export function uploadSelfie(upload) {
     let userId = getState().data.user.id
 
     // Storing in user folder in picture folder
-    firebase.storage().ref(game + '/' + userId).put(upload)
+    firebase.storage().ref(getState().exists.game + '/' + userId).put(upload)
       .then(function(snapshot) {
-        firebase.storage().ref(game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
-          firebase.database().ref(game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
+        firebase.storage().ref(getState().exists.game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
+          firebase.database().ref(getState().exists.game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
         }).catch(function(error) {console.log(error) });
       }).catch(function(error) {console.log(error) });
   }
@@ -72,7 +76,7 @@ export function uploadSelfie(upload) {
 export function registerGame() {
   return function(dispatch, getState) {
     let userId = getState().data.user.id;
-    firebase.database().ref(game + '/people/' + userId).child('enrolled').set(true);
+    firebase.database().ref(getState().exists.game + '/people/' + userId).child('enrolled').set(true);
   }
 }
 export function gameStatus(status) {
@@ -92,7 +96,8 @@ export function userStatus(status) {
 }
 
 export function startGame(start) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
+    let game = getState().exists.game;
     // Assign to a family
     firebase.database().ref('/'+ game + '/').once('value').then(function(snapshot) {
       const peopleData = snapshot.val().people;
@@ -163,14 +168,15 @@ export function startGame(start) {
 }
 
 export function stopGame() {
-  firebase.database().ref('/' + game + '/').child("game").set(false);
-  return function(dispatch) {
+  return function(dispatch, getState) {
+    firebase.database().ref('/' + getState().exists.game + '/').child("game").set(false);
     dispatch({ type: GAME_STATUS, payload: false });
   }
 }
 
 export function iDied(uid) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
+    let game = getState().exists.game
     firebase.database().ref("/" + game).once('value').then(c => c.val()).then(snapshot => {
       const people = snapshot.people;
       const allPeopleArray = Object.keys(people).map((key) => people[key])
@@ -194,33 +200,35 @@ export function iDied(uid) {
       scoreFamily = scoreFamily - 1;
       firebase.database().ref("/" + game + "/score").child(family).set(scoreFamily);
 
-      // Remove loser from targettedBy list  --> loser can not target anymore.
-      targets.forEach(element => {
-        if(element.success === false) {
-          let targetId = element.uid;
-          let targettedByArray = people[targetId].targettedBy;
-          let targettedByIndex = targettedByArray.findIndex(element => {return element = uid});
 
-          // remove targettedBy loser from his target
-          firebase.database().ref("/" + game + "/people/" + targetId + '/targettedBy').remove(targettedByIndex);
-        }
-      })
       // if family = 0, no new target needed
       if (scoreFamily != 0) {
+        console.log("No families won yet");
+        // Remove loser from targettedBy list  --> loser can not target anymore.
+        targets.forEach(element => {
+          if(element.success === false) {
+            let targetId = element.uid;
+            let targettedByArray = people[targetId].targettedBy;
+            let targettedByIndex = targettedByArray.findIndex(element => {return element = uid});
+
+            // remove targettedBy loser from his target
+            firebase.database().ref("/" + game + "/people/" + targetId + '/targettedBy').remove(targettedByIndex);
+          }
+        })
         // Winner: success on true + new target & word + add to targettedBy new target
         winnerIds.forEach(winnerId => {
           // Winner = nieuw target + woord
           // Find first person with least amount of targettedBy + alive + same family as former target
           let newTargetPerson = ""
           peopleArray.find(person => {
-            if(!person.targettedBy && person.alive === true && person.family === family && person.id != loser) {
+            if(!person.targettedBy && person.alive === true && person.family === family && person.id != loser.id) {
               console.log(person)
               newTargetPerson = person;
             } else {
               let leastTargettedBy = 1;
               do {
                 newTargetPerson = peopleArray.find(person => {
-                  return person.targettedBy.length === leastTargettedBy && person.alive === true && person.family === family ;
+                  return person.targettedBy.length === leastTargettedBy && person.alive === true && person.family === family && person.id != loser.id;
                 });
                 leastTargettedBy++;
               }
@@ -230,7 +238,6 @@ export function iDied(uid) {
             let loserIndex = people[winnerId].targets.findIndex(index => { return index.uid === uid })
             // Every winner gets loser success on true
             firebase.database().ref("/" + game + "/people/" + winnerId + '/targets/' + loserIndex ).child("success").set(true);
-
           })
           // Random word
           let newWord = wordsArray[Math.floor(Math.random()*wordsArray.length)];
@@ -242,9 +249,9 @@ export function iDied(uid) {
             word: newWord,
             selfieUrl: newTargetPerson.selfieUrl
           }
-
           // length of targetlist?
           let lengthTargets = people[winnerId].targets.length;
+
           firebase.database().ref("/" + game + "/people/" + winnerId + "/targets").child(lengthTargets).set(newTarget);
           // Add winner to targettedBy newTarget
           let lengthTargets2 = people[newTargetPerson.id].targets.length;

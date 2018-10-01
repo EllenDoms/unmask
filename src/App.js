@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './style/style.css';
 import { connect } from "react-redux";
 
-import { login, gameStatus, stopLoading } from './actions';
+import { setGame, login, gameStatus, stopLoading } from './actions';
 
 import * as firebase from 'firebase';
 import { firebaseConfig } from './config/firebase';
@@ -17,20 +17,27 @@ import RegisterGame from './screens/RegisterGame';
 
 class App extends Component {
   componentDidMount() {
-    // listener logged in
+    let params = new URLSearchParams(window.location.search);
+    let gameCode = params.get('game') || '';
+    this.props.setGame(gameCode);
+
+    // listener
     firebase.auth().onAuthStateChanged((user) => {
       if (!this.props.loggedIn && !this.props.user.id) {
+        console.log("gameCode: " + gameCode)
         this.props.login(user)
       }
     });
     // listener game status and stop loading
-    firebase.database().ref('CodeCapulets/game').on('value', snapshot => {
+    firebase.database().ref( gameCode + '/game').on('value', snapshot => {
       this.props.gameStatus(snapshot.val());
       this.props.stopLoading();
     });
   }
+
   render() {
-    let { loading, loggedIn, game, user }  = this.props
+    let { loading, gameExists, loggedIn, game, user }  = this.props;
+    if(gameExists != '' && user.selfieUrl !='') {}
     if(loading === true) {
       return <Loading />
     } else {
@@ -51,6 +58,7 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
+    gameExists: state.exists.game,
     user: state.data.user,
     game: state.data.game,
     loggedIn: state.data.loggedIn,
@@ -58,4 +66,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { login, gameStatus, stopLoading })(App);
+export default connect(mapStateToProps, { setGame, login, gameStatus, stopLoading })(App);
