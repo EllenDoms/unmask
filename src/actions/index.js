@@ -3,15 +3,14 @@ import * as firebase from "firebase";
 
 export function setGame(gameCode) {
   return function(dispatch) {
-    firebase.database().ref('/'+ gameCode).once('value').then(snap => {
-      dispatch({ type: GAME_EXISTS, payload: gameCode });
-    });
+    dispatch({ type: GAME_EXISTS, payload: gameCode });
   }
 }
 
 export const login = (user) => (dispatch, getState) => {
-  firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).once('value')
+  firebase.database().ref(getState().exists.game + '/people/' + user.uid).once('value')
   .then(snapshot => snapshot.val()).then(val => {
+    console.log("value", val);
     if(val) {
       dispatch({
         type: LOGIN_USER,
@@ -44,7 +43,12 @@ export const login = (user) => (dispatch, getState) => {
       });
     }
   })
+
+  firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).on('value', (snapshot) => {
+    dispatch({ type: UPDATE_USER, payload: snapshot.val() })
+  });
 };
+
 export const logout = () => (dispatch) => {
   firebase.auth().signOut().then(function() {
     dispatch({
@@ -53,6 +57,7 @@ export const logout = () => (dispatch) => {
     });
   }).catch(function(error) { console.log(error) });
 }
+
 export function stopLoading() {
   return function(dispatch) {
     dispatch({ type: LOADING, payload: false });
@@ -68,8 +73,6 @@ export function uploadSelfie(upload) {
       .then(function(snapshot) {
         firebase.storage().ref(getState().exists.game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
           firebase.database().ref(getState().exists.game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
-          dispatch(updateUser({selfieUrl}))
-
         }).catch(function(error) {console.log(error) });
       }).catch(function(error) {console.log(error) });
   }

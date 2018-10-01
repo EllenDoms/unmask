@@ -23,10 +23,11 @@ class App extends Component {
 
     // listener
     firebase.auth().onAuthStateChanged((user) => {
-      if (!this.props.loggedIn && !this.props.user.id) {
+      if (user) {
         this.props.login(user)
       }
     });
+
     // listener game status and stop loading
     firebase.database().ref( gameCode + '/game').on('value', snapshot => {
       this.props.gameStatus(snapshot.val());
