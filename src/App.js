@@ -37,6 +37,8 @@ class App extends Component {
 
   render() {
     let { loading, gameExists, loggedIn, game, user }  = this.props;
+    console.log("User is:", user);
+
     if(gameExists != '' && user.selfieUrl !='') {}
     if(loading === true) {
       return <Loading />

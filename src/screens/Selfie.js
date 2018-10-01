@@ -5,12 +5,6 @@ import * as firebase from 'firebase';
 import { uploadSelfie, userStatus } from '../actions';
 
 class Selfie extends Component {
-  componentWillMount() {
-    // Listener user
-    firebase.database().ref('CodeCapulets/people/' + this.props.user.id).on('value', snapshot => {
-      this.props.userStatus(snapshot.val());
-    });
-  }
   render() {
     return (
       <div className="content">

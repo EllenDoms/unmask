@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import FooterNav from '../components/FooterNav';
 import FooterSmallNav from '../components/FooterSmallNav';

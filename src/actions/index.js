@@ -12,7 +12,7 @@ export function setGame(gameCode) {
 export const login = (user) => (dispatch, getState) => {
   firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).once('value')
   .then(snapshot => snapshot.val()).then(val => {
-    console.log(snapshot.val())
+    console.log(val)
     if(val) {
       dispatch({
         type: LOGIN_USER,
