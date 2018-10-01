@@ -1,4 +1,4 @@
-import { LOGIN_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS, LOGOUT_USER } from "../actions/types";
+import { LOGIN_USER, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER, LOGOUT_USER } from "../actions/types";
 
 const initialState = {
   loggedIn: false,
@@ -24,10 +24,8 @@ const initialState = {
 export default function gameStateReducer (state = initialState, action) {
   switch(action.type) {
     case LOGIN_USER :
-      console.log("Action has been fired with user", action.user);
       return { ...state, user: action.user, loggedIn: action.loggedIn}
     case LOGOUT_USER :
-      console.log("Logged out")
       return { ...state, loggedIn: action.loggedIn}
     case LOADING :
       return { ...state, loading: action.loading }
@@ -35,9 +33,8 @@ export default function gameStateReducer (state = initialState, action) {
       return { ...state, game: action.payload }
     case SCORE_STATUS :
       return { ...state, score: action.payload }
-    case USER_STATUS :
-      console.log("User status called:", action.payload)
-      return { ...state, user: action.payload }
+    case UPDATE_USER :
+      return { ...state, user: {...state.user, ...action.payload} }
     default:
       return state;
   }

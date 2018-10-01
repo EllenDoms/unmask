@@ -1,4 +1,4 @@
-import { GAME_EXISTS, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, USER_STATUS } from './types.js';
+import { GAME_EXISTS, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
 import * as firebase from "firebase";
 
 export function setGame(gameCode) {
@@ -12,7 +12,6 @@ export function setGame(gameCode) {
 export const login = (user) => (dispatch, getState) => {
   firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).once('value')
   .then(snapshot => snapshot.val()).then(val => {
-    console.log(val)
     if(val) {
       dispatch({
         type: LOGIN_USER,
@@ -69,6 +68,8 @@ export function uploadSelfie(upload) {
       .then(function(snapshot) {
         firebase.storage().ref(getState().exists.game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
           firebase.database().ref(getState().exists.game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
+          dispatch(updateUser({selfieUrl}))
+
         }).catch(function(error) {console.log(error) });
       }).catch(function(error) {console.log(error) });
   }
@@ -89,9 +90,9 @@ export function scoreStatus(score) {
     dispatch({ type: SCORE_STATUS, payload: score });
   }
 }
-export function userStatus(status) {
+export function updateUser(user) {
   return function(dispatch) {
-    dispatch({ type: USER_STATUS, payload: status });
+    dispatch({ type: UPDATE_USER, payload: user });
   }
 }
 
@@ -155,7 +156,6 @@ export function startGame(start) {
         // set target
         firebase.database().ref('/'+ game + '/people/' + selectedID ).child("targets").set({0: target});
         firebase.database().ref('/'+ game + '/people/' + target.uid ).child("targettedBy").set({ 0: selectedID});
-        console.log(family + ' ' + peopleData[selectedID].name + ' vs ' + target.name)
         // set score for capulets and montagues;
         let score = { 'capulet': capuletsScore, 'montague': montaguesScore };
         firebase.database().ref('/'+ game + '/score').set(score);
@@ -203,7 +203,6 @@ export function iDied(uid) {
 
       // if family = 0, no new target needed
       if (scoreFamily != 0) {
-        console.log("No families won yet");
         // Remove loser from targettedBy list  --> loser can not target anymore.
         targets.forEach(element => {
           if(element.success === false) {
@@ -222,7 +221,6 @@ export function iDied(uid) {
           let newTargetPerson = ""
           peopleArray.find(person => {
             if(!person.targettedBy && person.alive === true && person.family === family && person.id != loser.id) {
-              console.log(person)
               newTargetPerson = person;
             } else {
               let leastTargettedBy = 1;

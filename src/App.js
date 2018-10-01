@@ -24,7 +24,6 @@ class App extends Component {
     // listener
     firebase.auth().onAuthStateChanged((user) => {
       if (!this.props.loggedIn && !this.props.user.id) {
-        console.log("gameCode: " + gameCode)
         this.props.login(user)
       }
     });
@@ -37,7 +36,6 @@ class App extends Component {
 
   render() {
     let { loading, gameExists, loggedIn, game, user }  = this.props;
-    console.log("User is:", user);
 
     if(gameExists != '' && user.selfieUrl !='') {}
     if(loading === true) {

@@ -27,7 +27,6 @@ class TooLate extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.data)
   return {
     user: state.data.user,
     score: state.data.score,

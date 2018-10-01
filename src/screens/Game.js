@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import FooterNav from '../components/FooterNav';
 import FooterSmallNav from '../components/FooterSmallNav';
 
-import { scoreStatus, userStatus } from '../actions';
+import { scoreStatus } from '../actions';
 
 import * as firebase from 'firebase';
 
@@ -101,4 +101,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { scoreStatus, userStatus })(Game);
+export default connect(mapStateToProps, { scoreStatus })(Game);

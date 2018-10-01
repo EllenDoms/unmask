@@ -4,4 +4,4 @@ export const LOGOUT_USER = 'LOGOUT_USER';
 export const LOADING = 'LOADING';
 export const GAME_STATUS = 'GAME_STATUS';
 export const SCORE_STATUS = 'SCORE_STATUS';
-export const USER_STATUS = 'USER_STATUS';
+export const UPDATE_USER = 'UPDATE_USER';
