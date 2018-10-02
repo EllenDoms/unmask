@@ -79,7 +79,6 @@ class Game extends Component {
               <FooterSmallNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
             </div>
           )
-
         } else {
           return (
             <div>

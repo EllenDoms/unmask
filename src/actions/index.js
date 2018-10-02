@@ -182,5 +182,6 @@ export function iDied(uid) {
 
     var iDied = firebase.functions().httpsCallable('idied');
     iDied({game});
+    dispatch({ type: UPDATE_USER, payload: {alive: false} })
   }
 }

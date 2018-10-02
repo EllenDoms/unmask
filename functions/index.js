@@ -5,8 +5,6 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-const game = "CodeCapulets"
-
 // link oproepen is get call
 
 exports.idied = functions.https.onCall((data, context) => {
@@ -41,12 +39,15 @@ const processDeath = (uid, game) => {
         }
       })
 
+      // Alive: false
+      admin.database().ref("/" + game + "/people/" + uid ).child("alive").set(false);
+
       // *** Herbereken totals
       scoreFamily = scoreFamily - 1;
       admin.database().ref("/" + game + "/score").child(family).set(scoreFamily);
 
       // if family = 0, no new target needed
-      if (scoreFamily !== 0) {
+      if(scoreFamily !== 0) {
         // Remove loser from targettedBy list  --> loser can not target anymore.
         targets.forEach(element => {
           if(element.success === false) {
@@ -100,48 +101,6 @@ const processDeath = (uid, game) => {
           admin.database().ref("/" + game + "/people/" + newTargetPerson.id + '/targettedBy').child(lengthTargets2).set(winnerId);
         })
       }
-
-
-      // Alive: false
-      return admin.database().ref("/" + game + "/people/" + uid ).child("alive").set(false);
+      return uid
     }).catch(err => console.log(err));
 }
-
-// if died
-exports.isdead = functions.https.onRequest((request, response) => {
-  let uid = request.query.uid;
-
-  // Success op true van target met uid
-  admin.database().ref("/" + game).once('value').then(c => c.val()).then(snapshot => {
-
-    const people = snapshot.people;
-    const loser = people[uid];
-    const family = loser.family;
-    const targets = loser.targets;
-    const winnerIds = loser.targettedBy;
-    let scoreFamily = snapshot.score[family];
-
-    // Herbereken totals
-    scoreFamily = scoreFamily - 1;
-    admin.database().ref("/" + game + "/score").child(family).set(scoreFamily);
-
-    // Remove loser from targettedBy list  --> loser can not target anymore.
-    targets.forEach(element => {
-      if(element.success === false) {
-        let targetId = element.uid;
-        let targettedByArray = people[targetId].targettedBy;
-        let targettedById = targettedByArray[0];
-        admin.database().ref("/" + game + "/people/" + targetId + '/targettedBy').remove(uid)
-        response.send(targettedById);
-      }
-    })
-
-    // Winner = nieuw target + woord
-    // get target that is not targettedBy --> array
-
-    // Alive: false
-    admin.database().ref("/" + game + "/people/" + uid ).child("alive").set(false);
-
-    return snapshot;
-  }).catch(error => { console.error(error) });
-});

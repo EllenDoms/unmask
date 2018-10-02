@@ -7,7 +7,6 @@ class Admin extends Component {
   render() {
     if(!this.props.game) {
       // if game is false (not playing)
-      console.log("not playing")
       return (
         <div className='content'>
           <div className='container bgWhite'>

@@ -55,7 +55,6 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     gameExists: state.exists.game,
     user: state.data.user,
