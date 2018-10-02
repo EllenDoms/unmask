@@ -21,11 +21,9 @@ class App extends Component {
     let gameCode = params.get('game') || '';
     this.props.setGame(gameCode);
 
-    // listener
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.props.login(user)
-      }
+    // listener authentication
+    firebase.auth().onAuthStateChanged(user => {
+      if(user) { this.props.login(user) }
     });
 
     // listener game status and stop loading
@@ -38,7 +36,6 @@ class App extends Component {
   render() {
     let { loading, gameExists, loggedIn, game, user }  = this.props;
 
-    if(gameExists != '' && user.selfieUrl !='') {}
     if(loading === true) {
       return <Loading />
     } else {
@@ -58,6 +55,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     gameExists: state.exists.game,
     user: state.data.user,

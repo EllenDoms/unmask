@@ -45,6 +45,7 @@ class Game extends Component {
   }
   render() {
     let { game, user, score } = this.props
+
     if(!game) {
       // if game = false (not started): go to waiting page
       if(!user.admin) {
@@ -54,7 +55,6 @@ class Game extends Component {
       }
     } else if(game) {
       // game started
-
       if(!user.admin) {
         if(user.alive && score.capulet != 0 && score.montague != 0) {
           return (
@@ -72,18 +72,19 @@ class Game extends Component {
         }
       } else {
         // admin
-        if(user.alive && score.capulet != 0 && score.montague != 0) {
-          return (
-            <div>
-              {this.renderpage(this.state.active)}
-              <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
-            </div>
-          )
-        } else {
+        if(!user.alive || score.capulet === 0 || score.montague === 0) {
           return (
             <div>
               {this.renderpageSmall(this.state.active)}
               <FooterSmallNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
+            </div>
+          )
+
+        } else {
+          return (
+            <div>
+              {this.renderpage(this.state.active)}
+              <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
             </div>
           )
         }
