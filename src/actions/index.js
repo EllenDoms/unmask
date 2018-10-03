@@ -1,22 +1,21 @@
-import { GAME_EXISTS, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
+import { GAME_EXISTS, USERS_ENROLMENT, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
 import * as firebase from "firebase";
 
 export function setGame(gameCode) {
   return function(dispatch, getState) {
     dispatch({ type: GAME_EXISTS, payload: gameCode });
-    firebase.database().ref(gameCode + '/game').once('value')
+    firebase.database().ref(gameCode).once('value')
     .then(snapshot => {
-      console.log(snapshot.val())
       if (!snapshot.val()) {
-        console.log('no game exists');
         dispatch({ type: GAME_EXISTS, payload: false });
-      } 
+      }
     })
   }
 }
 
 export const login = (user) => (dispatch, getState) => {
-  firebase.database().ref(getState().exists.game + '/people/' + user.uid).once('value')
+  const { game } = getState().exists
+  firebase.database().ref( game + '/people/' + user.uid).once('value')
   .then(snapshot => snapshot.val()).then(val => {
     if(val) {
       dispatch({
@@ -42,7 +41,7 @@ export const login = (user) => (dispatch, getState) => {
           }
         ],
       }
-      firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).update(params);
+      firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
       dispatch({
         type: LOGIN_USER,
         user: params,
@@ -51,9 +50,22 @@ export const login = (user) => (dispatch, getState) => {
     }
   })
 
-  firebase.database().ref('/' + getState().exists.game + '/people/' + user.uid).on('value', (snapshot) => {
+  firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
     dispatch({ type: UPDATE_USER, payload: snapshot.val() })
   });
+
+  // Count all registered for game
+  firebase.database().ref('/' + game + '/people/').on('value', (snapshot) => {
+    const peopleArray = Object.keys(snapshot.val()).map((key) => snapshot.val()[key])
+    let amountRegistered = peopleArray.length;
+    let amountReady = 0;
+    peopleArray.forEach(person => {
+      person.enrolled === true ? amountReady ++ : '';
+    });
+    dispatch({ type: USERS_ENROLMENT, registered: amountRegistered, ready: amountReady });
+
+  });
+
 };
 
 export const logout = () => (dispatch) => {
@@ -116,7 +128,6 @@ export function startGame(start) {
 
   }
 }
-
 export function stopGame() {
   return function(dispatch, getState) {
     let { game } = getState().exists
@@ -126,7 +137,6 @@ export function stopGame() {
     dispatch({ type: GAME_STATUS, payload: false });
   }
 }
-
 export function iDied(uid) {
   return function(dispatch, getState) {
     let { game } = getState().exists

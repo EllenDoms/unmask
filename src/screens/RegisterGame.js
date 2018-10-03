@@ -22,7 +22,7 @@ class RegisterGame extends Component {
           <img className="avatar avatarSmall centerImage" src={this.props.user.selfieUrl} alt='profilePicture' />
           <p className="center">So exciting!<br />You're not enrolled just yet... But be careful, after this page: There is NO way back... <br/> Let the games begin and may the odds be ever in your favor.</p>
         </div>
-        <FooterBtn text="Enroll!" click={() => this.props.registerGame()} />
+        <FooterBtn text="Jump in the game!" click={() => this.props.registerGame()} />
       </div>
     )
   }
