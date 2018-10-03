@@ -101,10 +101,11 @@ export function updateUser(user) {
 export function startGame(start) {
   return function(dispatch, getState) {
     let { game } = getState().exists;
-
+    // loading until gamestatus changed?
+    dispatch({ type: LOADING, payload: true });
     let startGame = firebase.functions().httpsCallable('startgame');
     startGame({game});
-    dispatch({ type: GAME_STATUS, payload: true });
+
   }
 }
 
