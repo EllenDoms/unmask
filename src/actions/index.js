@@ -155,9 +155,13 @@ export function startGame(start) {
         target.selfieUrl = peopleData[target.uid].selfieUrl;
         target.name = peopleData[target.uid].name;
 
-        // set target
-        firebase.database().ref('/'+ game + '/people/' + selectedID ).child("targets").set({0: target});
-        firebase.database().ref('/'+ game + '/people/' + target.uid ).child("targettedBy").set({ 0: selectedID});
+        // set target + targettedby (can be multiple)
+        firebase.database().ref('/'+ game + '/people/' + selectedID + '/targets').child(target.uid).set(target);
+
+        // for each target add one to targettedBy
+        firebase.database().ref('/'+ game + '/people/' + target.uid + '/targettedBy').child(selectedID).set(selectedID);
+
+        console.log(family + ' ' + peopleData[selectedID].name + "'s target: " + target.name)
         // set score for capulets and montagues;
         let score = { 'capulet': capuletsScore, 'montague': montaguesScore };
         firebase.database().ref('/'+ game + '/score').set(score);
@@ -171,16 +175,18 @@ export function startGame(start) {
 
 export function stopGame() {
   return function(dispatch, getState) {
-    firebase.database().ref('/' + getState().exists.game + '/').child("game").set(false);
-    dispatch({ type: GAME_STATUS, payload: false });
+    let { game } = getState().exists
+
+    let stopGame = firebase.functions().httpsCallable('stopgame');
+    stopGame({game})
   }
 }
 
 export function iDied(uid) {
   return function(dispatch, getState) {
-    let game = getState().exists.game
+    let { game } = getState().exists
 
-    var iDied = firebase.functions().httpsCallable('idied');
+    let iDied = firebase.functions().httpsCallable('idied');
     iDied({game});
     dispatch({ type: UPDATE_USER, payload: {alive: false} })
   }
