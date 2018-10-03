@@ -7,6 +7,7 @@ import { setGame, login, gameStatus, stopLoading } from './actions';
 import * as firebase from 'firebase';
 import { firebaseConfig } from './config/firebase';
 
+import NoGame from './screens/NoGame';
 import Loading from './screens/Loading';
 import Login from './screens/Login';
 import Selfie from './screens/Selfie';
@@ -35,8 +36,9 @@ class App extends Component {
 
   render() {
     let { loading, gameExists, loggedIn, game, user }  = this.props;
-
-    if(loading === true) {
+    if(gameExists === '' || gameExists === false) {
+      return <NoGame />
+    } else if(loading === true ) {
       return <Loading />
     } else {
       if (loggedIn === false) {
