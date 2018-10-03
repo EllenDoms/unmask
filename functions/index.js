@@ -16,7 +16,6 @@ exports.idied = functions.https.onCall((data, context) => {
 
   return null;
 });
-
 const processDeath = (uid, game) => {
   return admin.database().ref("/" + game).once('value').then(c => c.val())
     .then(gameInfo => {
@@ -113,20 +112,100 @@ exports.stopgame = functions.https.onCall((data, context) => {
 
   return null;
 });
-
 const processStop = (uid, game) => {
   admin.database().ref('/' + game + '/').child("game").set(false);
-  dispatch({ type: GAME_STATUS, payload: false });
 
   // remove targets + targettedBy
   admin.database().ref("/" + game + '/people').once('value').then(c => c.val())
     .then(people => {
       const allPeopleArray = Object.keys(people).map((key) => people[key])
       allPeopleArray.forEach(person => {
-        firebase.database().ref("/" + game + "/people/" + person.id + '/targets').remove();
-        firebase.database().ref("/" + game + "/people/" + person.id + '/targettedBy').remove();
+        admin.database().ref("/" + game + "/people/" + person.id + '/targets').remove();
+        admin.database().ref("/" + game + "/people/" + person.id + '/targettedBy').remove();
       })
       return uid;
     }).catch(err => console.log(err));
 
+}
+
+exports.startgame = functions.https.onCall((data, context) => {
+  const game = data.game;
+  const uid = context.auth.uid;
+
+  if(game && uid){
+    return processStart(uid, game)
+  }
+
+  return null;
+})
+const processStart = (uid, game) => {
+  admin.database().ref('/'+ game + '/').once('value').then(function(snapshot) {
+    const peopleData = snapshot.val().people;
+    const wordsData = snapshot.val().words;
+
+    // convert stupid firebase objects to normal array
+    const wordsArray = Object.keys(wordsData).map((key) => wordsData[key])
+    const allPeopleArray = Object.keys(peopleData).map((key) => peopleData[key])
+
+    //array only with enrolled people
+    const peopleArray = [];
+    allPeopleArray.map(person => {
+      if(person.enrolled) {
+        peopleArray.push(person);
+      }
+    })
+
+    // randomize array with people
+    const randArray = peopleArray.sort((a, b) => {return 0.5 - Math.random()});
+    let capuletsScore = 0;
+    let montaguesScore = 0;
+    for(let i = 0; i < randArray.length; i++) {
+      let selectedID = randArray[i].id;
+      let target = {
+        success: false,
+        uid: '',
+        name: '',
+        word: '',
+        selfieUrl: ''
+      }
+
+      // even and odd people
+      let family = ''
+      if(i % 2 === 0) {
+        family = 'capulet'
+        capuletsScore++;
+
+        // if odd amount of people: last capulet has no target, give them first montague again
+        randArray[i+1] ? target.uid = randArray[i+1].id : target.uid = randArray[1].id;
+
+      } else {
+        // if index is odd: montague
+        family = 'montague'
+        montaguesScore++;
+
+        target.uid = randArray[i-1].id;
+      }
+      admin.database().ref('/'+ game + '/people/' + selectedID + '/family').set(family);
+      admin.database().ref('/'+ game + '/people/' + selectedID + '/alive').set(true);
+      // target word is random from array + add photo from target
+      target.word = wordsArray[Math.floor(Math.random()*wordsArray.length)];
+      target.selfieUrl = peopleData[target.uid].selfieUrl;
+      target.name = peopleData[target.uid].name;
+
+      // set target + targettedby (can be multiple)
+      admin.database().ref('/'+ game + '/people/' + selectedID + '/targets').child(target.uid).set(target);
+
+      // for each target add one to targettedBy
+      admin.database().ref('/'+ game + '/people/' + target.uid + '/targettedBy').child(selectedID).set(selectedID);
+
+      // set score for capulets and montagues;
+      let score = { 'capulet': capuletsScore, 'montague': montaguesScore };
+      admin.database().ref('/'+ game + '/score').set(score);
+
+      // let the games begin! (aka game = true)
+      admin.database().ref('/' + game + '/').child("game").set(true);
+
+    }
+    return null;
+  }).catch(err => console.log(err));
 }

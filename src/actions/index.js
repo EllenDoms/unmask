@@ -100,76 +100,11 @@ export function updateUser(user) {
 
 export function startGame(start) {
   return function(dispatch, getState) {
-    let game = getState().exists.game;
-    // Assign to a family
-    firebase.database().ref('/'+ game + '/').once('value').then(function(snapshot) {
-      const peopleData = snapshot.val().people;
-      const wordsData = snapshot.val().words;
+    let { game } = getState().exists;
 
-      // convert stupid firebase objects to normal array
-      const wordsArray = Object.keys(wordsData).map((key) => wordsData[key])
-      const allPeopleArray = Object.keys(peopleData).map((key) => peopleData[key])
-
-      //array only with enrolled people
-      const peopleArray = [];
-      allPeopleArray.map(person => {
-        if(person.enrolled) {
-          peopleArray.push(person);
-        }
-      })
-
-      // randomize array with people
-      const randArray = peopleArray.sort((a, b) => {return 0.5 - Math.random()});
-      let capuletsScore = 0;
-      let montaguesScore = 0;
-      for(let i = 0; i < randArray.length; i++) {
-        let selectedID = randArray[i].id;
-        let target = {
-          success: false,
-          uid: '',
-          name: '',
-          word: '',
-          selfieUrl: ''
-        }
-
-        // even and odd people
-        let family = ''
-        if(i % 2 === 0) {
-          family = 'capulet'
-          capuletsScore++;
-
-          // if odd amount of people: last capulet has no target, give them first montague again
-          randArray[i+1] ? target.uid = randArray[i+1].id : target.uid = randArray[1].id;
-
-        } else {
-          // if index is odd: montague
-          family = 'montague'
-          montaguesScore++;
-
-          target.uid = randArray[i-1].id;
-        }
-        firebase.database().ref('/'+ game + '/people/' + selectedID + '/family').set(family);
-        firebase.database().ref('/'+ game + '/people/' + selectedID + '/alive').set(true);
-        // target word is random from array + add photo from target
-        target.word = wordsArray[Math.floor(Math.random()*wordsArray.length)];
-        target.selfieUrl = peopleData[target.uid].selfieUrl;
-        target.name = peopleData[target.uid].name;
-
-        // set target + targettedby (can be multiple)
-        firebase.database().ref('/'+ game + '/people/' + selectedID + '/targets').child(target.uid).set(target);
-
-        // for each target add one to targettedBy
-        firebase.database().ref('/'+ game + '/people/' + target.uid + '/targettedBy').child(selectedID).set(selectedID);
-
-        console.log(family + ' ' + peopleData[selectedID].name + "'s target: " + target.name)
-        // set score for capulets and montagues;
-        let score = { 'capulet': capuletsScore, 'montague': montaguesScore };
-        firebase.database().ref('/'+ game + '/score').set(score);
-
-        // let the games begin! (aka game = true)
-        firebase.database().ref('/' + game + '/').child("game").set(true);
-      }
-    })
+    let startGame = firebase.functions().httpsCallable('startgame');
+    startGame({game});
+    dispatch({ type: GAME_STATUS, payload: true });
   }
 }
 
@@ -179,6 +114,7 @@ export function stopGame() {
 
     let stopGame = firebase.functions().httpsCallable('stopgame');
     stopGame({game})
+    dispatch({ type: GAME_STATUS, payload: false });
   }
 }
 
@@ -188,6 +124,6 @@ export function iDied(uid) {
 
     let iDied = firebase.functions().httpsCallable('idied');
     iDied({game});
-    dispatch({ type: UPDATE_USER, payload: {alive: false} })
+    dispatch({ type: UPDATE_USER, payload: {alive: false} });
   }
 }
