@@ -2,8 +2,16 @@ import { GAME_EXISTS, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATU
 import * as firebase from "firebase";
 
 export function setGame(gameCode) {
-  return function(dispatch) {
+  return function(dispatch, getState) {
     dispatch({ type: GAME_EXISTS, payload: gameCode });
+    firebase.database().ref(gameCode + '/game').once('value')
+    .then(snapshot => {
+      console.log(snapshot.val())
+      if (!snapshot.val()) {
+        console.log('no game exists');
+        dispatch({ type: GAME_EXISTS, payload: false });
+      } 
+    })
   }
 }
 
