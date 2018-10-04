@@ -29,7 +29,6 @@ const processDeath = (uid, game) => {
       const targetsArray = Object.keys(targetsData).map((key) => targetsData[key])
       const winnerIdsData = loser.targettedBy;
       const winnerIdsArray = winnerIdsData ? Object.keys(winnerIdsData).map((key) => winnerIdsData[key]) : '';
-      let scoreFamily = gameInfo.score[family];
 
       //array only with enrolled people
       const peopleArray = [];
@@ -42,9 +41,13 @@ const processDeath = (uid, game) => {
       // Alive: false
       admin.database().ref("/" + game + "/people/" + uid ).child("alive").set(false);
 
-      // Herbereken totals
-      scoreFamily = scoreFamily - 1;
+      // Update family score
+      let scoreFamily = -1; //minus one: the person dying right now?
+      peopleArray.forEach(person => {
+        if(person.enrolled === true && person.alive === true && person.family === family) { scoreFamily++;}
+      })
       admin.database().ref("/" + game + "/score").child(family).set(scoreFamily);
+
 
       // if family = 0, game would be over
       if(scoreFamily !== 0) {

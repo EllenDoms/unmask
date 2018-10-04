@@ -5,6 +5,7 @@ import Loading from './Loading';
 export default class Target extends Component {
   render() {
     const { user } = this.props
+    console.log(user)
     const targetsArray = Object.keys(user.targets).map((key) => user.targets[key])
     const activeTarget = targetsArray.find(target => {
       // success is false

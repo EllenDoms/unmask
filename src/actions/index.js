@@ -2,7 +2,7 @@ import { GAME_EXISTS, USERS_ENROLMENT, LOGIN_USER, LOGOUT_USER, LOADING, GAME_ST
 import * as firebase from "firebase";
 
 export function setGame(gameCode) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({ type: GAME_EXISTS, payload: gameCode });
     firebase.database().ref(gameCode).once('value')
     .then(snapshot => {

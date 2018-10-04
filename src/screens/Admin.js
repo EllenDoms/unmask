@@ -39,7 +39,6 @@ class Admin extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     game: state.data.game,
     admin: state.admin,
