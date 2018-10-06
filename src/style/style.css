@@ -13,9 +13,6 @@ body {
   align-self: center;
   display: flex;
 }
-.vertCent {
-  display: flex;
-}
 .flexCenter {
   display: flex;
   justify-content: center;
@@ -44,6 +41,9 @@ p {
   letter-spacing: 0;
   line-height: 24px;
   margin: 10px 0px;
+}
+.small {
+  font-size: 12px;
 }
 button {
   background-color: #FFF;

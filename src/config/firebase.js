@@ -12,4 +12,4 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export const databaseGame = firebase.database().ref('CodeCapulets');
+//export const databaseGame = firebase.database().ref('CodeCapulets');

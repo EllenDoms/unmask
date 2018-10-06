@@ -44,7 +44,7 @@ const processDeath = (uid, game) => {
       // Update family score
       let scoreFamily = -1; //minus one: the person dying right now?
       peopleArray.forEach(person => {
-        if(person.enrolled === true && person.alive === true && person.family === family) { scoreFamily++;}
+        if(person.alive === true && person.family === family) { scoreFamily++; }
       })
       admin.database().ref("/" + game + "/score").child(family).set(scoreFamily);
 
