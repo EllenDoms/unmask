@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
 
-import { registerGame } from '../actions';
+import { enroll } from '../actions';
 import FooterBtn from '../components/FooterBtn';
 
-class RegisterGame extends Component {
+class Enroll extends Component {
   componentDidMount() {
     // listener enrolled?
     firebase.auth().onAuthStateChanged((user) => {
@@ -22,7 +22,7 @@ class RegisterGame extends Component {
           <img className="avatar avatarSmall centerImage" src={this.props.user.selfieUrl} alt='profilePicture' />
           <p className="center">So exciting!<br />You're not enrolled just yet... But be careful, after this page: There is NO way back... <br/> Let the games begin and may the odds be ever in your favor.</p>
         </div>
-        <FooterBtn text="Jump in the game!" click={() => this.props.registerGame()} />
+        <FooterBtn text="Jump in the game!" click={() => this.props.enroll()} />
       </div>
     )
   }
@@ -34,4 +34,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { registerGame })(RegisterGame);
+export default connect(mapStateToProps, { enroll })(Enroll);

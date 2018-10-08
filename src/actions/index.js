@@ -1,8 +1,10 @@
 import { GAME_EXISTS, USERS_ENROLMENT, LOGIN_USER, LOGOUT_USER, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
 import * as firebase from "firebase";
+import history from '../auth/history';
 
 export function setGame(gameCode) {
   return function(dispatch) {
+    console.log('Game exists: ', gameCode)
     dispatch({ type: GAME_EXISTS, payload: gameCode });
     firebase.database().ref(gameCode).once('value')
     .then(snapshot => {
@@ -13,59 +15,77 @@ export function setGame(gameCode) {
   }
 }
 
-export const login = (user) => (dispatch, getState) => {
-  const { game } = getState().exists
-  firebase.database().ref( game + '/people/' + user.uid).once('value')
-  .then(snapshot => snapshot.val()).then(val => {
-    if(val) {
-      dispatch({
-        type: LOGIN_USER,
-        user: val,
-        loggedIn: true,
-      });
-    } else {
-      let params = {
-        id: user.uid,
-        admin: false,
-        fbPhotoUrl: user.photoURL,
-        name: user.displayName,
-        family: '',
-        selfieUrl: '',
-        targettedBy: [],
-        alive: true,
-        targets: [
-          {
-            uid: user.uid,
-            word: '',
-            success: false
-          }
-        ],
-      }
-      firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
-      dispatch({
-        type: LOGIN_USER,
-        user: params,
-        loggedIn: true,
-      });
-    }
+export const newGame = (user) => (dispatch, getState) => {
+  firebase.database().ref().push({
+    game : false,
+    words : ['Ananas', 'Kiwi']
   })
+    .then((snapshot) => {
+      console.log('New game: ' + snapshot.key)
+      history.push('/?game=' + snapshot.key)
 
-  firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
-    dispatch({ type: UPDATE_USER, payload: snapshot.val() })
-  });
+      var provider = new firebase.auth.FacebookAuthProvider();
+      firebase.auth().signInWithRedirect(provider).then(function(result) {
+        var user = result.user;
+        this.props.login(user)
+      }).catch(function(error) { console.log(error) });
+  })
+}
 
-  // Count all registered for game
-  firebase.database().ref('/' + game + '/people/').on('value', (snapshot) => {
-    const peopleArray = Object.keys(snapshot.val()).map((key) => snapshot.val()[key])
-    let amountRegistered = peopleArray.length;
-    let amountReady = 0;
-    peopleArray.forEach(person => {
-      person.enrolled === true ? amountReady ++ : '';
+export const login = (user) => (dispatch, getState) => {
+  let { game } = getState().exists
+  if (game) {
+    console.log('game exists')
+    // if game exists
+    firebase.database().ref( game + '/people/').once('value')
+    .then(snapshot => snapshot.val()).then(val => {
+      console.log('People: ', val)
+      if(val && val[user.uid]) {
+        dispatch({
+          type: LOGIN_USER,
+          user: val[user.uid],
+          loggedIn: true,
+        });
+      } else {
+        const admin = val ? false : true
+        let params = {
+          id: user.uid,
+          admin: admin,
+          fbPhotoUrl: user.photoURL,
+          name: user.displayName,
+          family: '',
+          selfieUrl: '',
+          targettedBy: [],
+          alive: true,
+        }
+        firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
+        dispatch({
+          type: LOGIN_USER,
+          user: params,
+          loggedIn: true,
+        });
+      }
+    })
+
+
+    firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
+      dispatch({ type: UPDATE_USER, payload: snapshot.val() })
+      // Count all registered for game
+      firebase.database().ref('/' + game + '/people/').on('value', (snapshot) => {
+        if(snapshot.val()) {
+          const peopleArray = Object.keys(snapshot.val()).map((key) => snapshot.val()[key])
+          let amountRegistered = peopleArray.length;
+          let amountReady = 0;
+          peopleArray.forEach(person => {
+            person.enrolled === true ? amountReady ++ : '';
+          });
+          dispatch({ type: USERS_ENROLMENT, registered: amountRegistered, ready: amountReady });
+        }
+      });
     });
-    dispatch({ type: USERS_ENROLMENT, registered: amountRegistered, ready: amountReady });
 
-  });
 
+  }
 };
 
 export const logout = () => (dispatch) => {
@@ -96,7 +116,7 @@ export function uploadSelfie(upload) {
       }).catch(function(error) {console.log(error) });
   }
 }
-export function registerGame() {
+export function enroll() {
   return function(dispatch, getState) {
     let userId = getState().data.user.id;
     firebase.database().ref(getState().exists.game + '/people/' + userId).child('enrolled').set(true);
@@ -125,7 +145,6 @@ export function startGame(start) {
     dispatch({ type: LOADING, payload: true });
     let startGame = firebase.functions().httpsCallable('startgame');
     startGame({game});
-
   }
 }
 export function stopGame() {
