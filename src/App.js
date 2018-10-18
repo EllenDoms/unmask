@@ -11,6 +11,7 @@ import Loading from './screens/Loading';
 import Login from './screens/Login';
 import NoGame from './screens/NoGame';
 import NewGame from './screens/addGame/NewGame';
+import EnrollGame from './screens/EnrollGame';
 import Game from './screens/Game';
 import Admin from './screens/game/Admin';
 
@@ -41,7 +42,7 @@ class App extends Component {
     }
   }
   render() {
-    let { loading, gameExists, game, user }  = this.props;
+    let { loading, gameExists, game, user, userGame }  = this.props;
     if(loading) {
       return <Loading />
     } else if(gameExists === false) {
@@ -58,8 +59,8 @@ class App extends Component {
       // game exists
       if (!user.loggedIn) {
         return <Login game='yes' />
-      } else if(user.enrolled !== true) {
-        return <div>game exists</div>
+      } else if(userGame.enrolled !== true) {
+        return <EnrollGame />
       } else {
         return <Game />
       }
@@ -82,6 +83,7 @@ function mapStateToProps(state) {
     loading: state.general.loading,
     gameExists: state.general.gameExists,
     user: state.general.user,
+    userGame: state.data.user,
     game: state.data.game,
   };
 }

@@ -57,7 +57,6 @@ export const login = (user) => (dispatch, getState) => {
   let { gameExists } = getState().general;
   if (gameExists) {
     let game = 'games/' + gameExists
-    console.log(game)
     // if game exists
     firebase.database().ref( game + '/people/').once('value')
     .then(snapshot => snapshot.val()).then(val => {
