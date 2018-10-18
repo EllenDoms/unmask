@@ -22,13 +22,6 @@ class App extends Component {
     let gameCode = params.get('game') || '';
     this.props.setGame(gameCode);
 
-    // if(gameCode) {
-    //   // listener game status
-    //   firebase.database().ref( gameCode + '/game').on('value', snapshot => {
-    //     this.props.gameStatus(snapshot.val());
-    //   });
-    // }
-
     // listener authentication
     firebase.auth().onAuthStateChanged(user => {
       if(user) { this.props.login(user) }
@@ -64,15 +57,6 @@ class App extends Component {
       } else {
         return <Game />
       }
-
-
-      // if (!user.selfieUrl || user.selfieUrl === "") {
-      //   return <Selfie />
-      // } else if (game && !user.enrolled) {
-      //   return <TooLate />
-      // } else if(user.enrolled !== true) {
-      //   return <Enroll />
-      // }
     }
   }
 }
