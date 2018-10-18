@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ScoreComponent from '../components/ScoreComponent';
+import ScoreComponent from '../../components/ScoreComponent';
 
 export default class Score extends Component {
   render() {

@@ -7,12 +7,12 @@ import { scoreStatus } from '../actions';
 
 import * as firebase from 'firebase';
 
-import Waiting from './Waiting';
-import Rules from './Rules';
-import Target from './Target';
-import Score from './Score';
-import Die from './Die';
-import Admin from './Admin';
+import Waiting from './game/Waiting';
+import Rules from './game/Rules';
+import Target from './game/Target';
+import Score from './game/Score';
+import Die from './game/Die';
+import Admin from './game/Admin';
 
 class Game extends Component {
   constructor(props) {
@@ -56,7 +56,7 @@ class Game extends Component {
     } else if(game) {
       // game started
       if(!user.admin) {
-        if(user.alive && score.capulet != 0 && score.montague != 0) {
+        if(user.alive && score.capulet !== 0 && score.montague !== 0) {
           return (
             <div>
               {this.renderpage(this.state.active)}

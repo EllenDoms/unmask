@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Loading from './Loading';
+import Loading from '../Loading';
 
 export default class Target extends Component {
   render() {
@@ -9,7 +9,7 @@ export default class Target extends Component {
     const targetsArray = Object.keys(user.targets).map((key) => user.targets[key])
     const activeTarget = targetsArray.find(target => {
       // success is false
-      return target.success == false;
+      return target.success === false;
     });
     if(activeTarget) {
       return (

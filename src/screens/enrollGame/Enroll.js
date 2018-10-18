@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
 
-import { enroll } from '../actions';
-import FooterBtn from '../components/FooterBtn';
+import { enroll } from '../../actions';
+import FooterBtn from '../../components/FooterBtn';
 
 class Enroll extends Component {
   componentDidMount() {

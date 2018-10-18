@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 
-import { iDied, logout } from '../actions';
+import { iDied, logout } from '../../actions';
 
 class Die extends Component {
   render() {

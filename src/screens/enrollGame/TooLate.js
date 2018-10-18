@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import * as firebase from 'firebase';
 
-import { scoreStatus, logout } from '../actions';
-import ScoreComponent from '../components/ScoreComponent';
+import { scoreStatus, logout } from '../../actions';
+import ScoreComponent from '../../components/ScoreComponent';
 
 class TooLate extends Component {
   componentDidMount() {

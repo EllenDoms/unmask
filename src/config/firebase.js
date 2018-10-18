@@ -11,5 +11,7 @@ export const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-
-//export const databaseGame = firebase.database().ref('CodeCapulets');
+export const database = firebase.database()
+export const ref = database.ref()
+export const auth = firebase.auth
+export const provider = new firebase.auth.FacebookAuthProvider()

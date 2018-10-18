@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import * as firebase from 'firebase';
 import { connect } from "react-redux";
-import { newGame } from '../actions';
+import { newGame } from '../../actions';
 
-import FooterBtn from '../components/FooterBtn';
+import FooterBtn from '../../components/FooterBtn';
 
 class NewGame extends Component {
   render() {

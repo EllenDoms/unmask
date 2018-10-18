@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 
-import { startGame, stopGame } from '../actions'
+import { startGame, stopGame } from '../../actions'
 
 class Admin extends Component {
   render() {

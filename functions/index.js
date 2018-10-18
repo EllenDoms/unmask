@@ -5,6 +5,14 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
+// Anthony??
+// exports.date = functions.https.onRequest((req, res) => {
+//   let authHeader = req.get('Authorization');
+//
+//   console.log("auth header: ", authHeader);
+// });
+
+
 // link oproepen is get call
 exports.idied = functions.https.onCall((data, context) => {
   const game = data.game;

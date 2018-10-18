@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { login } from '../actions';
 import * as firebase from 'firebase';
+import { provider, auth } from '../config/firebase';
 
 import FooterBtn from '../components/FooterBtn';
 
 class Login extends Component {
   login() {
-    var provider = new firebase.auth.FacebookAuthProvider();
-    firebase.auth().signInWithRedirect(provider).then(function(result) {
+    console.log("logging in")
+    auth().signInWithPopup(provider).then(result => {
       var user = result.user;
       this.props.login(user)
-    }).catch(function(error) {
-      console.log(error)
-    });
+    }).catch(function(error) { console.log(error) });
   }
   render() {
     return (
@@ -28,10 +28,4 @@ class Login extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    loggedIn: state.data.loggedIn
-  };
-}
-
-export default connect(mapStateToProps)(Login);
+export default connect( null, { login })(Login);
