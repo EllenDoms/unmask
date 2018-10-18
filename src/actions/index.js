@@ -54,18 +54,15 @@ export const login = (user) => (dispatch, getState) => {
       dispatch({ type: LOGIN_USER, payload: params });
     }
   })
-  if (getState().general) {
-    let { gameExists } = getState().general;
+  let { gameExists } = getState().general;
+  if (gameExists) {
     let game = 'games/' + gameExists
     console.log(game)
     // if game exists
     firebase.database().ref( game + '/people/').once('value')
     .then(snapshot => snapshot.val()).then(val => {
       if(val && val[user.uid]) {
-        dispatch({
-          type: LOGIN_USER,
-          payload: val[user.uid],
-        });
+        dispatch({ type: LOGIN_USER, payload: val[user.uid], });
       } else {
         const admin = val ? false : true
         let params = {
@@ -79,13 +76,9 @@ export const login = (user) => (dispatch, getState) => {
           alive: true,
         }
         firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
-        dispatch({
-          type: LOGIN_USER,
-          payload: params,
-        });
+        dispatch({ type: LOGIN_USER, payload: params, });
       }
     })
-
 
     firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
       dispatch({ type: UPDATE_USER, payload: snapshot.val() })
