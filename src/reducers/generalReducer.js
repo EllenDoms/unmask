@@ -1,4 +1,4 @@
-import { LOGIN_USER, GAME_EXISTS, LOADING, LOGOUT_USER } from "../actions/types";
+import { LOGIN_USER, SET_GAME, LOADING, LOGOUT_USER } from "../actions/types";
 
 const initialState = {
   loading: true,
@@ -10,7 +10,7 @@ const initialState = {
 
 export default function generalReducer (state = initialState, action) {
   switch(action.type) {
-    case GAME_EXISTS :
+    case SET_GAME :
       return { ...state, gameExists: action.payload }
     case LOADING :
       return { ...state, loading: action.payload }

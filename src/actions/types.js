@@ -1,4 +1,4 @@
-export const GAME_EXISTS = 'GAME_EXISTS';
+export const SET_GAME = 'SET_GAME';
 
 export const USERS_ENROLMENT = 'USERS_ENROLMENT';
 

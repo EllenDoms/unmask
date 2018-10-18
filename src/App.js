@@ -11,11 +11,8 @@ import Loading from './screens/Loading';
 import Login from './screens/Login';
 import NoGame from './screens/NoGame';
 import NewGame from './screens/addGame/NewGame';
-import Selfie from './screens/enrollGame/Selfie';
 import Game from './screens/Game';
-import TooLate from './screens/enrollGame/TooLate';
 import Admin from './screens/game/Admin';
-import Enroll from './screens/enrollGame/Enroll';
 
 class App extends Component {
   componentDidMount() {
@@ -55,26 +52,26 @@ class App extends Component {
       if(!user.loggedIn) {
         return <Login game='no' />
       } else {
-        return <div>portal</div> 
+        return <div>portal</div>
       }
     } else {
       // game exists
       if (!user.loggedIn) {
         return <Login game='yes' />
-      } else {
-        return <div>game exists</div>
-      }
-
-
-      if (!user.selfieUrl || user.selfieUrl === "") {
-        return <Selfie />
-      } else if (game && !user.enrolled) {
-        return <TooLate />
       } else if(user.enrolled !== true) {
-        return <Enroll />
+        return <div>game exists</div>
       } else {
         return <Game />
       }
+
+
+      // if (!user.selfieUrl || user.selfieUrl === "") {
+      //   return <Selfie />
+      // } else if (game && !user.enrolled) {
+      //   return <TooLate />
+      // } else if(user.enrolled !== true) {
+      //   return <Enroll />
+      // }
     }
   }
 }
