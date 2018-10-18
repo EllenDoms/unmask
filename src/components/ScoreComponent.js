@@ -6,12 +6,6 @@ import { scoreStatus } from '../actions';
 
 
 class ScoreComponent extends Component {
-  componentWillMount() {
-    // listener Score
-    firebase.database().ref('CodeCapulets/score').on('value', snapshot => {
-      this.props.scoreStatus(snapshot.val());
-    });
-  }
   render() {
     const { capulet, montague } = this.props.score
     if(capulet === 0 || montague === 0) {
@@ -43,6 +37,7 @@ class ScoreComponent extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state.data.score)
   return {
     score: state.data.score,
   };

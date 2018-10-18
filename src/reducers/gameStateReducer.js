@@ -11,7 +11,7 @@ const initialState = {
     alive: '',
     targets: [],
   },
-  game: '',
+  playing: '',
   score: {
     capulet: '',
     montague: ''
@@ -22,7 +22,7 @@ export default function gameStateReducer (state = initialState, action) {
   switch(action.type) {
 
     case GAME_STATUS :
-      return { ...state, game: action.payload }
+      return { ...state, playing: action.payload }
     case SCORE_STATUS :
       return { ...state, score: action.payload }
     case UPDATE_USER :

@@ -30,7 +30,6 @@ class App extends Component {
   }
   componentDidUpdate() {
     if(this.props.gameExists !== '' && this.props.user.loggedIn) {
-      console.log("stop loading")
       this.props.stopLoading()
     }
   }

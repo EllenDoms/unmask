@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import FooterNav from '../components/FooterNav';
 import FooterSmallNav from '../components/FooterSmallNav';
 
-import { scoreStatus } from '../actions';
+import { scoreStatus, gameStatus } from '../actions';
 
 import * as firebase from 'firebase';
 
@@ -20,10 +20,18 @@ class Game extends Component {
     this.state = { active: "rules" };
   }
   componentWillMount() {
+    const gameCode = this.props.gameExists
     // listener Score
-    firebase.database().ref('CodeCapulets/score').on('value', snapshot => {
+    firebase.database().ref('games/' + gameCode + '/score').on('value', snapshot => {
       this.props.scoreStatus(snapshot.val());
     });
+
+    if(gameCode) {
+      // listener game status
+      firebase.database().ref( 'games/' + gameCode + '/playing').on('value', snapshot => {
+        this.props.gameStatus(snapshot.val());
+      });
+    }
   }
   renderpage(page){
     switch(page) {
@@ -44,16 +52,15 @@ class Game extends Component {
     this.setState({active: activePage})
   }
   render() {
-    let { game, user, score } = this.props
-
-    if(!game) {
-      // if game = false (not started): go to waiting page
+    let { playing, user, score } = this.props
+    if(!playing) {
+      // if playing = false (not started): go to waiting page
       if(!user.admin) {
         return <Waiting user={user}  />
       } else {
         return <Admin user={user} />
       }
-    } else if(game) {
+    } else if(playing) {
       // game started
       if(!user.admin) {
         if(user.alive && score.capulet !== 0 && score.montague !== 0) {
@@ -94,11 +101,11 @@ class Game extends Component {
 
 function mapStateToProps(state) {
   return {
-    loggedIn: state.data.loggedIn,
+    gameExists: state.general.gameExists,
     user: state.data.user,
-    game: state.data.game,
+    playing: state.data.playing,
     score: state.data.score,
   };
 }
 
-export default connect(mapStateToProps, { scoreStatus })(Game);
+export default connect(mapStateToProps, { scoreStatus, gameStatus })(Game);

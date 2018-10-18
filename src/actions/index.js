@@ -11,7 +11,6 @@ export function setGame(gameCode) {
       dispatch({ type: SET_GAME, payload: gameCode });
       firebase.database().ref('games/' + gameCode).once('value')
       .then(snapshot => {
-        console.log(snapshot.val())
         if (!snapshot.val()) {
           dispatch({ type: SET_GAME, payload: false });
         }
@@ -149,19 +148,20 @@ export function updateUser(user) {
 
 export function startGame(start) {
   return function(dispatch, getState) {
-    let { game } = getState().exists;
+    let { gameExists } = getState().general;
+
     // loading until gamestatus changed?
     dispatch({ type: LOADING, payload: true });
     let startGame = firebase.functions().httpsCallable('startgame');
-    startGame({game});
+    startGame({gameExists});
   }
 }
 export function stopGame() {
   return function(dispatch, getState) {
-    let { game } = getState().exists
+    let { gameExists } = getState().general;
 
     let stopGame = firebase.functions().httpsCallable('stopgame');
-    stopGame({game})
+    stopGame({gameExists})
     dispatch({ type: GAME_STATUS, payload: false });
   }
 }

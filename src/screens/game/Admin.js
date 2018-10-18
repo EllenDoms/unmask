@@ -5,7 +5,7 @@ import { startGame, stopGame } from '../../actions'
 
 class Admin extends Component {
   render() {
-    if(!this.props.game) {
+    if(!this.props.playing) {
       // if game is false (not playing)
       return (
         <div className='content'>
@@ -40,7 +40,7 @@ class Admin extends Component {
 
 function mapStateToProps(state) {
   return {
-    game: state.data.game,
+    playing: state.data.playing,
     admin: state.admin,
   };
 }
