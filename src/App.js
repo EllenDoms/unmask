@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { setGame, login, gameStatus, stopLoading } from './actions';
 
 import * as firebase from 'firebase';
-import { firebaseConfig } from './config/firebase';
+import { auth } from './config/firebase';
 
 import Loading from './screens/Loading';
 import Login from './screens/Login';
@@ -23,13 +23,14 @@ class App extends Component {
     this.props.setGame(gameCode);
 
     // listener authentication
-    firebase.auth().onAuthStateChanged(user => {
-      if(user) { this.props.login(user) }
+    auth().onAuthStateChanged(user => {
+      console.log(user)
+      this.props.login(user)
     });
-
   }
   componentDidUpdate() {
-    if(this.props.gameExists !== '' && this.props.user.loggedIn) {
+    console.log(this.props.user.loggedIn)
+    if(this.props.gameExists !== '' && this.props.user.loggedIn !== '') {
       this.props.stopLoading()
     }
   }
