@@ -167,10 +167,10 @@ export function stopGame() {
 }
 export function iDied(uid) {
   return function(dispatch, getState) {
-    let { game } = getState().exists
+    let { gameExists } = getState().general
 
     let iDied = firebase.functions().httpsCallable('idied');
-    iDied({game});
+    iDied({gameExists});
     dispatch({ type: UPDATE_USER, payload: {alive: false} });
   }
 }

@@ -106,7 +106,7 @@ const processDeath = (uid, game) => {
 }
 
 exports.stopgame = functions.https.onCall((data, context) => {
-  const game = data.game;
+  const game = data.gameExists;
   const uid = context.auth.uid;
 
   if(game && uid){
@@ -116,7 +116,7 @@ exports.stopgame = functions.https.onCall((data, context) => {
   return null;
 });
 const processStop = (uid, game) => {
-  admin.database().ref("/games/" + game + '/').child("game").set(false);
+  admin.database().ref("/games/" + game + '/').child("playing").set(false);
 
   // remove targets + targettedBy
   admin.database().ref("/games/" + game + '/people').once('value').then(c => c.val())
@@ -142,7 +142,7 @@ exports.startgame = functions.https.onCall((data, context) => {
   return null;
 })
 const processStart = (uid, game) => {
-  admin.database().ref("/games/"+ game + '/').once('value').then(function(snapshot) {
+  admin.database().ref("/games/" + game + '/').once('value').then(function(snapshot) {
     const peopleData = snapshot.val().people;
     const wordsData = snapshot.val().words;
 
@@ -188,22 +188,22 @@ const processStart = (uid, game) => {
 
         target.uid = randArray[i-1].id;
       }
-      admin.database().ref("/games/"+ game + '/people/' + selectedID + '/family').set(family);
-      admin.database().ref("/games/"+ game + '/people/' + selectedID + '/alive').set(true);
+      admin.database().ref("/games/" + game + '/people/' + selectedID + '/family').set(family);
+      admin.database().ref("/games/" + game + '/people/' + selectedID + '/alive').set(true);
       // target word is random from array + add photo from target
       target.word = wordsArray[Math.floor(Math.random()*wordsArray.length)];
       target.selfieUrl = peopleData[target.uid].selfieUrl;
       target.name = peopleData[target.uid].name;
 
       // set target + targettedby (can be multiple)
-      admin.database().ref("/games/"+ game + '/people/' + selectedID + '/targets').child(target.uid).set(target);
+      admin.database().ref("/games/" + game + '/people/' + selectedID + '/targets').child(target.uid).set(target);
 
       // for each target add one to targettedBy
-      admin.database().ref("/games/"+ game + '/people/' + target.uid + '/targettedBy').child(selectedID).set(selectedID);
+      admin.database().ref("/games/" + game + '/people/' + target.uid + '/targettedBy').child(selectedID).set(selectedID);
 
       // set score for capulets and montagues;
       let score = { 'capulet': capuletsScore, 'montague': montaguesScore };
-      admin.database().ref("/games/"+ game + '/score').set(score);
+      admin.database().ref("/games/" + game + '/score').set(score);
 
       // let the games begin! (aka game = true)
       admin.database().ref("/games/" + game + '/').child("playing").set(true);
