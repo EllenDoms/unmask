@@ -51,56 +51,72 @@ export const login = (user) => (dispatch, getState) => {
           loggedIn: true,
           uid: user.uid,
           fbPhotoUrl: user.photoURL,
-          name: user.displayName
+          name: user.displayName,
+          games: []
         }
         firebase.database().ref('/people/' + user.uid).set(params);
         dispatch({ type: LOGIN_USER, payload: params });
       }
     })
+    // check if there is a game...
     let { gameExists } = getState().general;
     if (gameExists) {
-      let game = 'games/' + gameExists
-      // if game exists
-      firebase.database().ref( game + '/people/').once('value')
-      .then(snapshot => snapshot.val()).then(val => {
-        if(val && val[user.uid]) {
-          dispatch({ type: UPDATE_USER, payload: val[user.uid], });
-        } else if(val) {
-          const admin = val ? false : true
-          let params = {
-            id: user.uid,
-            admin: admin,
-            fbPhotoUrl: user.photoURL,
-            name: user.displayName,
-            family: '',
-            selfieUrl: '',
-            targettedBy: [],
-            alive: true,
-          }
-          firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
-          dispatch({ type: UPDATE_USER, payload: params, });
-        }
-      })
-
-      firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
-        dispatch({ type: UPDATE_USER, payload: snapshot.val() })
-        // Count all registered for game
-        firebase.database().ref('/' + game + '/people/').on('value', (snapshot) => {
-          if(snapshot.val()) {
-            const peopleArray = Object.keys(snapshot.val()).map((key) => snapshot.val()[key])
-            let amountRegistered = peopleArray.length;
-            let amountReady = 0;
-            peopleArray.forEach(person => {
-              person.enrolled === true ? amountReady ++ : '';
-            });
-            dispatch({ type: USERS_ENROLMENT, registered: amountRegistered, ready: amountReady });
-          }
-        });
-      });
+      dispatch(loginGame(user, gameExists))
     }
+
+    // Find all games where user is part
+
   }
 };
+export const loginGame = (user, gameExists) => (dispatch, getState) => {
+  let game = 'games/' + gameExists
+  // if game exists
+  // add/update person to game
+  firebase.database().ref( game + '/people/').once('value')
+  .then(snapshot => snapshot.val()).then(val => {
+    let role = '';
+    if(val && val[user.uid]) {
+      // if person is already in game, update state
+      dispatch({ type: UPDATE_USER, payload: val[user.uid], });
+      role = val[user.uid].role;
+    } else if(val) {
+      // if person is not yet in game, add him/her
+      // first person is admin, rest is team
+      role = val ? 'team' : 'admin'
 
+      let params = {
+        id: user.uid,
+        role: role,
+        fbPhotoUrl: user.photoURL,
+        name: user.displayName,
+        family: '',
+        selfieUrl: '',
+        targettedBy: [],
+        alive: true,
+      }
+      firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
+      dispatch({ type: UPDATE_USER, payload: params, });
+    }
+    // add this game to the person's games with role
+    firebase.database().ref( '/people/' + user.uid + '/games/').child(gameExists).set(role);
+  })
+
+  firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
+    dispatch({ type: UPDATE_USER, payload: snapshot.val() })
+    // Count all registered for game
+    firebase.database().ref('/' + game + '/people/').on('value', (snapshot) => {
+      if(snapshot.val()) {
+        const peopleArray = Object.keys(snapshot.val()).map((key) => snapshot.val()[key])
+        let amountRegistered = peopleArray.length;
+        let amountReady = 0;
+        peopleArray.forEach(person => {
+          person.enrolled === true ? amountReady ++ : '';
+        });
+        dispatch({ type: USERS_ENROLMENT, registered: amountRegistered, ready: amountReady });
+      }
+    });
+  });
+}
 export const logout = () => (dispatch, getState) => {
   let userId = getState().data.user.id
   firebase.auth().signOut().then(function() {

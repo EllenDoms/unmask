@@ -10,10 +10,9 @@ import { auth } from './config/firebase';
 import Loading from './screens/Loading';
 import Login from './screens/Login';
 import NoGame from './screens/NoGame';
-import NewGame from './screens/addGame/NewGame';
 import EnrollGame from './screens/EnrollGame';
 import Game from './screens/Game';
-import Admin from './screens/game/Admin';
+import Portal from './screens/Portal';
 
 class App extends Component {
   componentDidMount() {
@@ -46,7 +45,7 @@ class App extends Component {
       if(!user.loggedIn) {
         return <Login game='no' />
       } else {
-        return <div>portal</div>
+        return <Portal />
       }
     } else {
       // game exists

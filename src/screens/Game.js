@@ -55,19 +55,19 @@ class Game extends Component {
     let { playing, user, score } = this.props
     if(!playing) {
       // if playing = false (not started): go to waiting page
-      if(!user.admin) {
+      if(user.role === 'team') {
         return <Waiting user={user}  />
       } else {
         return <Admin user={user} />
       }
     } else if(playing) {
       // game started
-      if(!user.admin) {
+      if(user.role === 'team') {
         if(user.alive && score.capulet !== 0 && score.montague !== 0) {
           return (
             <div>
               {this.renderpage(this.state.active)}
-              <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
+              <FooterNav admin={user.role} active={this.state.active} action={this.setActive} />
             </div>
           )
         } else {
@@ -83,14 +83,14 @@ class Game extends Component {
           return (
             <div>
               {this.renderpageSmall(this.state.active)}
-              <FooterSmallNav admin={this.props.user.admin} active={this.state.active} action={this.setActive} />
+              <FooterSmallNav role={this.props.user.role} active={this.state.active} action={this.setActive} />
             </div>
           )
         } else {
           return (
             <div>
               {this.renderpage(this.state.active)}
-              <FooterNav admin={user.admin} active={this.state.active} action={this.setActive} />
+              <FooterNav role={user.role} active={this.state.active} action={this.setActive} />
             </div>
           )
         }

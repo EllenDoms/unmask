@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 export default class FooterNav extends Component {
   renderAdmin() {
-    let active = this.props.active;
-    if(this.props.admin) {
+    let {active, role} = this.props;
+    if(role === 'admin') {
       return(
         <button id="admin" className={active === "admin" ? 'nav-item active' : 'nav-item'} onClick={() => this.props.action('admin')}>
           <div className="material-icons">settings</div>

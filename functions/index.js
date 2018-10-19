@@ -13,7 +13,6 @@ exports.idied = functions.https.onCall((data, context) => {
   if(game && uid){
     return processDeath(uid, game)
   }
-
   return null;
 });
 const processDeath = (uid, game) => {

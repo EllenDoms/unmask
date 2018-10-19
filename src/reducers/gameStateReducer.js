@@ -2,7 +2,7 @@ import { GAME_STATUS, SCORE_STATUS, UPDATE_USER } from "../actions/types";
 
 const initialState = {
   user: {
-    admin: false,
+    role: 'team',
     id: '',
     name: '',
     family: '',
