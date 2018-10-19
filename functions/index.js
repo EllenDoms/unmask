@@ -7,7 +7,7 @@ admin.initializeApp();
 
 // link oproepen is get call
 exports.idied = functions.https.onCall((data, context) => {
-  const game = data.game;
+  const game = data.gameExists;
   const uid = context.auth.uid;
 
   if(game && uid){

@@ -25,7 +25,6 @@ export const newGame = (user) => (dispatch, getState) => {
     words : ['Ananas', 'Kiwi']
   })
     .then((snapshot) => {
-      console.log('New game: ' + snapshot.key)
       history.push('/?game=' + snapshot.key)
 
       var provider = new firebase.auth.FacebookAuthProvider();
@@ -40,7 +39,6 @@ export const login = (user) => (dispatch, getState) => {
   if(user === null) { // user not logged in
     dispatch({ type: LOGIN_USER, payload: {loggedIn: false} });
   } else {
-    console.log('User logged in')
     // add user to people
     database.ref('/people/' + user.uid).once('value')
     .then(snapshot => snapshot.val()).then(val => {
@@ -106,7 +104,6 @@ export const login = (user) => (dispatch, getState) => {
 export const logout = () => (dispatch, getState) => {
   let userId = getState().data.user.id
   firebase.auth().signOut().then(function() {
-    console.log(userId)
     firebase.database().ref('/people/' + userId).child('/loggedIn').set(false);
     dispatch({ type: LOGIN_USER, payload: false });
   }).catch(function(error) { console.log(error) });
