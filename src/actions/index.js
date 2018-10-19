@@ -69,7 +69,7 @@ export const login = (user) => (dispatch, getState) => {
       .then(snapshot => snapshot.val()).then(val => {
         if(val && val[user.uid]) {
           dispatch({ type: UPDATE_USER, payload: val[user.uid], });
-        } else {
+        } else if(val) {
           const admin = val ? false : true
           let params = {
             id: user.uid,
