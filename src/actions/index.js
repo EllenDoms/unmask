@@ -37,9 +37,7 @@ export const newGame = (user) => (dispatch, getState) => {
 }
 
 export const login = (user) => (dispatch, getState) => {
-  if(user === null) {
-    // user not logged in
-    console.log('User not logged in')
+  if(user === null) { // user not logged in
     dispatch({ type: LOGIN_USER, payload: {loggedIn: false} });
   } else {
     console.log('User logged in')
@@ -47,9 +45,9 @@ export const login = (user) => (dispatch, getState) => {
     database.ref('/people/' + user.uid).once('value')
     .then(snapshot => snapshot.val()).then(val => {
       if(val) {
-        console.log(val)
         val.loggedIn = true;
         dispatch({ type: LOGIN_USER, payload: val });
+        firebase.database().ref('/people/' + user.uid).child('/loggedIn').set(true);
       } else {
         let params = {
           loggedIn: true,
@@ -57,7 +55,7 @@ export const login = (user) => (dispatch, getState) => {
           fbPhotoUrl: user.photoURL,
           name: user.displayName
         }
-        firebase.database().ref('/people/' + user.uid).update(params);
+        firebase.database().ref('/people/' + user.uid).set(params);
         dispatch({ type: LOGIN_USER, payload: params });
       }
     })
