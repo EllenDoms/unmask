@@ -22,7 +22,7 @@ class Portal extends Component {
       return (<div>add button</div>)
     } else {
       return (
-        <div>
+        <div className='container bgWhite'>
           <Header />
           <div>add button</div>
           {this.renderCards()}

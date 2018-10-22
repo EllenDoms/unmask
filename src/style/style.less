@@ -6,7 +6,7 @@ out: style.css
 @font-bold: 'Roboto-Black', sans-serif;
 @fontSpecial: 'Cinzel Decorative', cursive;
 @grey: #F6F6F6;
-@boxShadow: 10px 0 10px 0 rgba(0,0,0,0.15);
+@boxShadow: 0px 0 10px 0 rgba(0,0,0,0.15);
 @transition: all 0.2s ease-out;
 
 * {
@@ -34,14 +34,12 @@ h1 {
   text-align: center;
   margin: 0px 0px 30px 0px;
 }
-
 h2 {
   font-family: Roboto-Bold;
   font-size: 24px;
   color: @secondary;
   letter-spacing: 0;
 }
-
 p {
   font-family: @font;
   font-size: 14px;
@@ -50,17 +48,16 @@ p {
   line-height: 24px;
   margin: 10px 0px;
 }
-
-.small {
-  font-size: 12px;
+.small { font-size: 12px; }
+.accent {
+  color: @primary;
+  font-weight: bold;
 }
-
 button {
   background-color: #FFF;
   border: none;
   outline:none;
 }
-
 .btn {
   width: 100%;
   background-color: @primary;
@@ -85,8 +82,6 @@ button {
   &.bgWhite { background-color: #FFF; min-height: ~"calc(100vh - 80px)";}
 }
 
-
-
 .number {
   width: 20px;
   height: 20px;
@@ -99,7 +94,6 @@ button {
   margin- right: 10px;
   margin-top: 12px;
 }
-
 .numberBig {
   font-family: @font-bold;
   font-size: 40px;
@@ -191,7 +185,25 @@ button {
   }
 }
 
+/*** CARD ***/
+.card {
+  background: #FFFFFF;
+  box-shadow: @boxShadow;
+  width: 100%;
+  margin-top: 30px;
+  padding: 10px 20px 20px 16px;
+  text-align: left;
+  border-left: 4px solid #FFF;
+  &.playing {
+    border-left: 4px solid @primary;
+  }
+  .wrapFlex {
+    display: flex;
+    justify-content: space-between;
+  }
+}
 
+/*** LOADING ***/
 .lds-ripple {
   display: inline-block;
   position: relative;

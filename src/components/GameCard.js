@@ -14,8 +14,10 @@ class GameCard extends Component {
     console.log(myGame)
     return (
       <button className={myGame.playing ? 'playing card' : 'card' } onClick={() => this.onClickGame()}>
-        <p className='accent'>{myGame.playing ? 'playing' : 'not playing'}</p>
-        <div className='tag'>{myGame.role === 'admin' ? 'admin' : ''}</div>
+        <div className='wrapFlex'>
+          <p className='accent'>{myGame.playing ? 'playing' : 'not playing'}</p>
+          <p className='tag'>{myGame.role === 'admin' ? 'admin' : ''}</p>
+        </div>
         <h2>{myGame.title}</h2>
       </button>
     )

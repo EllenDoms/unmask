@@ -43,6 +43,10 @@ p {
 .small {
   font-size: 12px;
 }
+.accent {
+  color: #D4AF37;
+  font-weight: bold;
+}
 button {
   background-color: #FFF;
   border: none;
@@ -127,7 +131,7 @@ button {
   z-index: -1;
 }
 .top {
-  box-shadow: 10px 0 10px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.15);
   z-index: 9;
   position: relative;
   background-color: #FFF;
@@ -163,7 +167,7 @@ button {
   display: flex;
   height: 83px;
   background-color: #FFF;
-  box-shadow: 10px 0 10px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.15);
 }
 .footer.button {
   height: 112px;
@@ -179,6 +183,24 @@ button {
 .footer .nav-item.active {
   color: #D4AF37;
 }
+/*** CARD ***/
+.card {
+  background: #FFFFFF;
+  box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.15);
+  width: 100%;
+  margin-top: 30px;
+  padding: 10px 20px 20px 16px;
+  text-align: left;
+  border-left: 4px solid #FFF;
+}
+.card.playing {
+  border-left: 4px solid #D4AF37;
+}
+.card .wrapFlex {
+  display: flex;
+  justify-content: space-between;
+}
+/*** LOADING ***/
 .lds-ripple {
   display: inline-block;
   position: relative;
