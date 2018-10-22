@@ -149,21 +149,23 @@ export function stopLoading() {
 
 export function uploadSelfie(upload) {
   return function(dispatch, getState) {
-    let userId = getState().data.user.id
+    let userId = getState().game.user.id;
+    let gameId = getState().general.gameExists;
 
     // Storing in user folder in picture folder
-    firebase.storage().ref(getState().exists.game + '/' + userId).put(upload)
+    firebase.storage().ref(gameId + '/' + userId).put(upload)
       .then(function(snapshot) {
-        firebase.storage().ref(getState().exists.game).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
-          firebase.database().ref(getState().exists.game + '/people/' + userId).child('selfieUrl').set(selfieUrl);
+        firebase.storage().ref(gameId).child('/' + userId).getDownloadURL().then(function(selfieUrl) {
+          console.log(selfieUrl)
+          firebase.database().ref('games/' + gameId + '/people/' + userId).child('selfieUrl').set(selfieUrl);
         }).catch(function(error) {console.log(error) });
       }).catch(function(error) {console.log(error) });
   }
 }
 export function enroll() {
   return function(dispatch, getState) {
-    let userId = getState().data.user.id;
-    firebase.database().ref(getState().exists.game + '/people/' + userId).child('enrolled').set(true);
+    let userId = getState().game.user.id;
+    firebase.database().ref('games/' + getState().general.gameExists + '/people/' + userId).child('enrolled').set(true);
   }
 }
 export function gameStatus(status) {

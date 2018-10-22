@@ -35,9 +35,9 @@ function mapStateToProps(state) {
   console.log(state)
   return {
     gameExists: state.general.gameExists,
-    user: state.data.user,
-    game: state.data.game,
-    loggedIn: state.data.loggedIn,
+    user: state.game.user,
+    game: state.game.game,
+    loggedIn: state.game.loggedIn,
     loading: state.general.loading
   };
 }

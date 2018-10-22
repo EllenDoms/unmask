@@ -24,7 +24,7 @@ class Selfie extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.data.user
+    user: state.game.user
   };
 }
 

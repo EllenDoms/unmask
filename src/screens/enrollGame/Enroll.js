@@ -30,7 +30,7 @@ class Enroll extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.data.user
+    user: state.game.user
   };
 }
 
