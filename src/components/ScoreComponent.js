@@ -21,12 +21,12 @@ class ScoreComponent extends Component {
       return (
         <div id="score" className='greyBg container'>
           <div className='left'>
-            <h2>{this.props.score.capulet}</h2>
+            <p className='numberBig'>{this.props.score.capulet}</p>
             <p className='center'>Capulets left</p>
           </div>
           <div className='middle'>vs</div>
           <div className='right'>
-            <h2>{this.props.score.montague}</h2>
+            <p className='numberBig'>{this.props.score.montague}</p>
             <p className='center'>Montagues left</p>
           </div>
         </div>

@@ -5,14 +5,16 @@ import history from '../auth/history';
 class GameCard extends Component {
   onClickGame() {
     history.push('/?game=' + this.props.games[this.props.gameKey].id)
+    window.location.reload()
+
   }
   render() {
     let { games, gameKey }  = this.props;
     let myGame = games[gameKey]
     console.log(myGame)
     return (
-      <button className='card' onClick={() => this.onClickGame()}>
-        <p className='accent'>{myGame.playing === true ? 'playing' : 'not playing'}</p>
+      <button className={myGame.playing ? 'playing card' : 'card' } onClick={() => this.onClickGame()}>
+        <p className='accent'>{myGame.playing ? 'playing' : 'not playing'}</p>
         <div className='tag'>{myGame.role === 'admin' ? 'admin' : ''}</div>
         <h2>{myGame.title}</h2>
       </button>

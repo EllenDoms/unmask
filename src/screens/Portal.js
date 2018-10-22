@@ -7,7 +7,6 @@ import Header from '../components/Header';
 import GameCard from '../components/GameCard';
 
 class Portal extends Component {
-
   renderCards() {
     const { user, games } = this.props;
     if(games) {
