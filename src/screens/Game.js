@@ -7,6 +7,7 @@ import { scoreStatus, gameStatus } from '../actions';
 
 import * as firebase from 'firebase';
 
+import Header from '../components/Header';
 import Waiting from './game/Waiting';
 import Rules from './game/Rules';
 import Target from './game/Target';
@@ -66,6 +67,7 @@ class Game extends Component {
         if(user.alive && score.capulet !== 0 && score.montague !== 0) {
           return (
             <div>
+              <Header back='true' />
               {this.renderpage(this.state.active)}
               <FooterNav admin={user.role} active={this.state.active} action={this.setActive} />
             </div>
@@ -73,6 +75,7 @@ class Game extends Component {
         } else {
           return(
             <div>
+              <Header back='true' />
               <Score user={user} score={score} />
             </div>
           )
@@ -82,6 +85,7 @@ class Game extends Component {
         if(!user.alive || score.capulet === 0 || score.montague === 0) {
           return (
             <div>
+              <Header back='true' />
               {this.renderpageSmall(this.state.active)}
               <FooterSmallNav role={this.props.user.role} active={this.state.active} action={this.setActive} />
             </div>
@@ -89,6 +93,7 @@ class Game extends Component {
         } else {
           return (
             <div>
+              <Header back='true' />
               {this.renderpage(this.state.active)}
               <FooterNav role={user.role} active={this.state.active} action={this.setActive} />
             </div>
@@ -100,6 +105,7 @@ class Game extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     gameExists: state.general.gameExists,
     user: state.game.user,

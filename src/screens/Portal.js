@@ -22,11 +22,14 @@ class Portal extends Component {
       return (<div>add button</div>)
     } else {
       return (
-        <div className='container bgWhite'>
-          <Header />
-          <div>add button</div>
-          {this.renderCards()}
+        <div>
+          <Header back='false' title={'Hi, ' + user.name + '!'} />
+          <div className='container bgWhite'>
+            <div>add button</div>
+            {this.renderCards()}
+          </div>
         </div>
+
       )
     }
   }

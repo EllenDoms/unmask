@@ -28,7 +28,6 @@ class App extends Component {
   }
   componentDidUpdate() {
     let { gameExists, user, games }  = this.props;
-    console.log(user.games)
     if(gameExists && user.loggedIn !== '' && user.games !== '' ) {
       this.props.stopLoading()
     }
@@ -64,7 +63,6 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     loading: state.general.loading,
     gameExists: state.general.gameExists,
