@@ -7,6 +7,11 @@ class GameCard extends Component {
     history.push('/?game=' + this.props.games[this.props.gameKey].id)
     window.location.reload()
   }
+  adminTag(myGame) {
+    if(myGame.role === 'admin') {
+      return <p className='tag small'>admin</p>;
+    }
+  }
   render() {
     let { games, gameKey }  = this.props;
     let myGame = games[gameKey]
@@ -14,7 +19,8 @@ class GameCard extends Component {
       <button className={myGame.playing ? 'playing card' : 'card' } onClick={() => this.onClickGame()}>
         <div className='wrapFlex'>
           <p className='accent'>{myGame.playing ? 'playing' : 'not playing'}</p>
-          <p className='tag small'>{myGame.role === 'admin' ? 'admin' : ''}</p>
+          {this.adminTag(myGame)}
+
         </div>
         <h2>{myGame.title}</h2>
       </button>

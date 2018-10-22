@@ -10,11 +10,15 @@ class Admin extends Component {
       return (
         <div className='content'>
           <div className='container bgWhite'>
-            <div>
-              <p className='center'>Players registered: </p>
-              <p className='numberBig'>{this.props.admin.registered}</p>
-              <p className='center'>Players ready: </p>
-              <p className='numberBig'>{this.props.admin.ready}</p>
+            <div id="score">
+              <div className='left'>
+                <p className='numberBig'>{this.props.admin.registered}</p>
+                <p className='center'>Players registered</p>
+              </div>
+              <div className='right'>
+                <p className='numberBig'>{this.props.admin.ready}</p>
+                <p className='center'>Players ready</p>
+              </div>
             </div>
             <button className='btn' onClick={() => this.props.startGame()}>Start game</button>
           </div>
