@@ -13,7 +13,10 @@ import Rules from './game/Rules';
 import Target from './game/Target';
 import Score from './game/Score';
 import Die from './game/Die';
-import Admin from './game/Admin';
+import Admin from './Admin';
+import NoGame from './NoGame';
+import EnrollGame from './EnrollGame';
+import NewGame from './admin/NewGame';
 
 class Game extends Component {
   constructor(props) {
@@ -54,14 +57,20 @@ class Game extends Component {
   }
   render() {
     let { playing, user, score } = this.props
-    if(!playing) {
-      // if playing = false (not started): go to waiting page
+    if(playing === 'setup' && user.role ==='admin') {
+      return <NewGame />
+    } else if(playing === 'enroll') {
+      // if playing = enroll (not started): go to waiting page
       if(user.role === 'team') {
-        return <Waiting user={user}  />
+        if(user.enrolled !== true) {
+          return <EnrollGame />
+        } else {
+          return <Waiting user={user}  />
+        }
       } else {
         return <Admin user={user} />
       }
-    } else if(playing) {
+    } else if(playing === 'yes') {
       // game started
       if(user.role === 'team') {
         if(user.alive && score.capulet !== 0 && score.montague !== 0) {
@@ -99,6 +108,14 @@ class Game extends Component {
             </div>
           )
         }
+      }
+    } else {
+      // playing === no
+      if(user.role === 'team') {
+        return <NoGame />
+      } else {
+        //admin
+        return <Admin user={user} />
       }
     }
   }

@@ -22,7 +22,7 @@ class Enroll extends Component {
           <img className="avatar avatarSmall centerImage" src={this.props.user.selfieUrl} alt='profilePicture' />
           <p className="center">So exciting!<br />You're not enrolled just yet... But be careful, after this page: There is NO way back... <br/> Let the games begin and may the odds be ever in your favor.</p>
         </div>
-        <FooterBtn text="Jump in the game!" click={() => this.props.enroll()} />
+        <FooterBtn text="I'm participating!" click={() => this.props.enroll()} />
       </div>
     )
   }

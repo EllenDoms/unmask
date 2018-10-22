@@ -10,7 +10,6 @@ import { auth } from './config/firebase';
 import Loading from './screens/Loading';
 import Login from './screens/Login';
 import NoGame from './screens/NoGame';
-import EnrollGame from './screens/EnrollGame';
 import Game from './screens/Game';
 import Portal from './screens/Portal';
 
@@ -53,8 +52,6 @@ class App extends Component {
       // game exists
       if (!user.loggedIn) {
         return <Login game='yes' />
-      } else if(userGame.enrolled !== true) {
-        return <EnrollGame />
       } else {
         return <Game />
       }

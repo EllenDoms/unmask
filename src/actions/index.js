@@ -19,22 +19,42 @@ export function setGame(gameCode) {
   }
 }
 
-export const newGame = (user) => (dispatch, getState) => {
-  firebase.database().ref().push({
-    game : false,
+export const newGame = () => (dispatch, getState) => {
+  firebase.database().ref('games/').push({
+    playing : 'setup',
     words : ['Ananas', 'Kiwi']
   })
     .then((snapshot) => {
-      history.push('/?game=' + snapshot.key)
+      let game = snapshot.key;
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
 
-      var provider = new firebase.auth.FacebookAuthProvider();
-      firebase.auth().signInWithRedirect(provider).then(function(result) {
-        var user = result.user;
-        this.props.login(user)
-      }).catch(function(error) { console.log(error) });
+          let params = {
+            id: user.uid,
+            role: 'admin',
+            fbPhotoUrl: user.photoURL,
+            name: user.displayName,
+            family: '',
+            selfieUrl: '',
+            targettedBy: [],
+            alive: true,
+          }
+          firebase.database().ref('games/' + game + '/people/' + user.uid).update(params);
+          dispatch({ type: UPDATE_USER, payload: params, });
+
+          // add this game to the person's games with role
+          firebase.database().ref( '/people/' + user.uid + '/games/').child(game).set('admin');
+
+          history.push('/?game=' + game);
+          window.location.reload();
+        }
+      })
   })
 }
-
+export const saveGameInfo = () => (dispatch, getState) => {
+  let gameId = getState().general.gameExists
+  firebase.database().ref('games/' + gameId).child('playing').set('no');
+}
 export const login = (user) => (dispatch, getState) => {
   if(user === null) { // user not logged in
     dispatch({ type: LOGIN_USER, payload: {loggedIn: false} });
@@ -67,6 +87,7 @@ export const login = (user) => (dispatch, getState) => {
 };
 export const loginGame = (user, gameExists) => (dispatch, getState) => {
   let game = 'games/' + gameExists
+  console.log(game)
   // if game exists
   // add/update person to game
   firebase.database().ref( game + '/people/').once('value')
@@ -91,17 +112,17 @@ export const loginGame = (user, gameExists) => (dispatch, getState) => {
         targettedBy: [],
         alive: true,
       }
-      firebase.database().ref('/' + game + '/people/' + user.uid).update(params);
+      firebase.database().ref(game + '/people/' + user.uid).update(params);
       dispatch({ type: UPDATE_USER, payload: params, });
     }
     // add this game to the person's games with role
     firebase.database().ref( '/people/' + user.uid + '/games/').child(gameExists).set(role);
   })
 
-  firebase.database().ref('/' + game + '/people/' + user.uid).on('value', (snapshot) => {
+  firebase.database().ref( game + '/people/' + user.uid).on('value', (snapshot) => {
     dispatch({ type: UPDATE_USER, payload: snapshot.val() })
     // Count all registered for game
-    firebase.database().ref('/' + game + '/people/').on('value', (snapshot) => {
+    firebase.database().ref( game + '/people/').on('value', (snapshot) => {
       if(snapshot.val()) {
         const peopleArray = Object.keys(snapshot.val()).map((key) => snapshot.val()[key])
         let amountRegistered = peopleArray.length;
@@ -130,14 +151,16 @@ export const getGames = (games) => (dispatch, getState) => {
   gamesArray.map(game => {
     firebase.database().ref('/games/' + game ).once('value')
     .then(snapshot => {
-      let params = {
-        id: snapshot.key,
-        playing: snapshot.val().playing,
-        role: user.games[game],
-        title: snapshot.val().title,
+      if(snapshot.val()) {
+        let params = {
+          id: snapshot.key,
+          playing: snapshot.val().playing,
+          role: user.games[game],
+          title: snapshot.val().title,
+        }
+        array.push(params);
+        dispatch({ type: GET_GAMES, payload: array });
       }
-      array.push(params);
-      dispatch({ type: GET_GAMES, payload: array });
     })
   })
 }
@@ -168,6 +191,7 @@ export function enroll() {
     firebase.database().ref('games/' + getState().general.gameExists + '/people/' + userId).child('enrolled').set(true);
   }
 }
+
 export function gameStatus(status) {
   return function(dispatch) {
     dispatch({ type: GAME_STATUS, payload: status });
@@ -179,11 +203,18 @@ export function scoreStatus(score) {
   }
 }
 export function updateUser(user) {
+  console.log(user)
   return function(dispatch) {
     dispatch({ type: UPDATE_USER, payload: user });
   }
 }
 
+export function startEnroll() {
+  return function(dispatch, getState) {
+    const { gameExists } = getState().general;
+    firebase.database().ref('games/' + gameExists ).child('playing').set('enroll');
+  }
+}
 export function startGame(start) {
   return function(dispatch, getState) {
     let { gameExists } = getState().general;
@@ -200,7 +231,7 @@ export function stopGame() {
 
     let stopGame = firebase.functions().httpsCallable('stopgame');
     stopGame({gameExists})
-    dispatch({ type: GAME_STATUS, payload: false });
+    dispatch({ type: GAME_STATUS, payload: 'no' });
   }
 }
 export function iDied(uid) {

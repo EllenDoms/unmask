@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 
-import { getGames } from '../actions';
+import { newGame } from '../actions';
 
 import Header from '../components/Header';
 import GameCard from '../components/GameCard';
@@ -25,7 +25,7 @@ class Portal extends Component {
         <div>
           <Header back='false' title={'Hi, ' + user.name + '!'} />
           <div className='container bgWhite'>
-            <div>add button</div>
+            <button onClick={() => this.props.newGame()}>add game</button>
             {this.renderCards()}
           </div>
         </div>
@@ -42,4 +42,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Portal);
+export default connect(mapStateToProps, {newGame})(Portal);

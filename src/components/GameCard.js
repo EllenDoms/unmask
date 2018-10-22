@@ -14,11 +14,11 @@ class GameCard extends Component {
   }
   render() {
     let { games, gameKey }  = this.props;
-    let myGame = games[gameKey]
+    let myGame = games[gameKey];
     return (
-      <button className={myGame.playing ? 'playing card' : 'card' } onClick={() => this.onClickGame()}>
+      <button className={myGame.playing === 'yes' ? 'playing card' : 'card' } onClick={() => this.onClickGame()}>
         <div className='wrapFlex'>
-          <p className='accent'>{myGame.playing ? 'playing' : 'not playing'}</p>
+          <p className='accent'>{myGame.playing === 'yes' ? 'playing' : 'not playing'}</p>
           {this.adminTag(myGame)}
 
         </div>
