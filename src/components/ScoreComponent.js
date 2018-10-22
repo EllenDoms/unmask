@@ -37,9 +37,8 @@ class ScoreComponent extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.data.score)
   return {
-    score: state.data.score,
+    score: state.game.score,
   };
 }
 

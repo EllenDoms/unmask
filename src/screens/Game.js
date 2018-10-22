@@ -102,9 +102,9 @@ class Game extends Component {
 function mapStateToProps(state) {
   return {
     gameExists: state.general.gameExists,
-    user: state.data.user,
-    playing: state.data.playing,
-    score: state.data.score,
+    user: state.game.user,
+    playing: state.game.playing,
+    score: state.game.score,
   };
 }
 

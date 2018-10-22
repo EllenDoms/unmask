@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './style/style.css';
 import { connect } from "react-redux";
 
-import { setGame, login, gameStatus, stopLoading } from './actions';
+import { setGame, login, gameStatus, stopLoading, getGames } from './actions';
 
 import * as firebase from 'firebase';
 import { auth } from './config/firebase';
@@ -23,14 +23,16 @@ class App extends Component {
 
     // listener authentication
     auth().onAuthStateChanged(user => {
-      console.log(user)
       this.props.login(user)
     });
   }
   componentDidUpdate() {
-    console.log(this.props.user.loggedIn)
-    if(this.props.gameExists !== '' && this.props.user.loggedIn !== '') {
+    let { gameExists, user, games }  = this.props;
+    if(gameExists !== '' && user.loggedIn !== '' && user.games ) {
       this.props.stopLoading()
+    }
+    if(user.games && !games) {
+      this.props.getGames(user.games);
     }
   }
   render() {
@@ -61,14 +63,15 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     loading: state.general.loading,
     gameExists: state.general.gameExists,
     user: state.general.user,
-    userGame: state.data.user,
-    game: state.data.game,
+    games: state.general.games,
+    userGame: state.game.user,
+    game: state.game.game,
+
   };
 }
 
-export default connect(mapStateToProps, { setGame, login, gameStatus, stopLoading })(App);
+export default connect(mapStateToProps, { setGame, login, gameStatus, stopLoading, getGames })(App);

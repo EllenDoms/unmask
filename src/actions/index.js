@@ -1,4 +1,4 @@
-import { SET_GAME, USERS_ENROLMENT, LOGIN_USER, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
+import { SET_GAME, USERS_ENROLMENT, LOGIN_USER, GET_GAMES, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
 import * as firebase from "firebase";
 import { database } from '../config/firebase';
 import history from '../auth/history';
@@ -63,9 +63,6 @@ export const login = (user) => (dispatch, getState) => {
     if (gameExists) {
       dispatch(loginGame(user, gameExists))
     }
-
-    // Find all games where user is part
-
   }
 };
 export const loginGame = (user, gameExists) => (dispatch, getState) => {
@@ -125,6 +122,25 @@ export const logout = () => (dispatch, getState) => {
   }).catch(function(error) { console.log(error) });
 }
 
+export const getGames = (games) => (dispatch, getState) => {
+  const user = getState().general.user
+  const gamesArray = Object.keys(games);
+  // for each game: add params to array
+  let array = [];
+  gamesArray.map(game => {
+    firebase.database().ref('/games/' + game ).once('value')
+    .then(snapshot => {
+      let params = {
+        id: snapshot.key,
+        playing: snapshot.val().playing,
+        role: user.games[game],
+        title: snapshot.val().title,
+      }
+      array.push(params);
+      dispatch({ type: GET_GAMES, payload: array });
+    })
+  })
+}
 export function stopLoading() {
   return function(dispatch) {
     dispatch({ type: LOADING, payload: false });

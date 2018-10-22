@@ -1,25 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import history from '../auth/history';
 
-class Header extends Component {
+class GameCard extends Component {
+  onClickGame() {
+    history.push('/?game=' + this.props.games[this.props.gameKey].id)
+  }
   render() {
-    let { user }  = this.props;
+    let { games, gameKey }  = this.props;
+    let myGame = games[gameKey]
+    console.log(myGame)
     return (
-      <div className='card'>
-        <p className='accent'>Playing</p>
-        <div className='tag'>admin</div>
-        <h2>Title of game</h2>
-        <p>10 registered</p>
-        <p>10 enrolled</p>
-      </div>
+      <button className='card' onClick={() => this.onClickGame()}>
+        <p className='accent'>{myGame.playing === true ? 'playing' : 'not playing'}</p>
+        <div className='tag'>{myGame.role === 'admin' ? 'admin' : ''}</div>
+        <h2>{myGame.title}</h2>
+      </button>
     )
   }
 }
 
 function mapStateToProps(state) {
   return {
-    user: state.general.user,
+    games: state.general.games
   };
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(GameCard);

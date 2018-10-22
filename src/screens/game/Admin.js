@@ -12,9 +12,9 @@ class Admin extends Component {
           <div className='container bgWhite'>
             <div>
               <p className='center'>Players registered: </p>
-              <h2>{this.props.admin.registered}</h2>
+              <p className='numberBig'>{this.props.admin.registered}</p>
               <p className='center'>Players ready: </p>
-              <h2>{this.props.admin.ready}</h2>
+              <p className='numberBig'>{this.props.admin.ready}</p>
             </div>
             <button className='btn' onClick={() => this.props.startGame()}>Start game</button>
           </div>
@@ -40,7 +40,7 @@ class Admin extends Component {
 
 function mapStateToProps(state) {
   return {
-    playing: state.data.playing,
+    playing: state.game.playing,
     admin: state.admin,
   };
 }

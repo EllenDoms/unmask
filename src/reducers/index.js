@@ -4,7 +4,7 @@ import generalReducer from './generalReducer';
 import adminReducer from './adminReducer';
 
 const rootReducer = combineReducers({
-  data: gameStateReducer,
+  game: gameStateReducer,
   general: generalReducer,
   admin: adminReducer,
 })
