@@ -6,7 +6,7 @@ import history from '../auth/history';
 export function setGame(gameCode) {
   return function(dispatch) {
     if(!gameCode) {
-      dispatch({ type: SET_GAME, payload: null });
+      dispatch({ type: SET_GAME, payload: 'noGame' });
     } else {
       dispatch({ type: SET_GAME, payload: gameCode });
       firebase.database().ref('games/' + gameCode).once('value')
@@ -60,7 +60,7 @@ export const login = (user) => (dispatch, getState) => {
     })
     // check if there is a game...
     let { gameExists } = getState().general;
-    if (gameExists) {
+    if (gameExists && gameExists !== 'noGame') {
       dispatch(loginGame(user, gameExists))
     }
   }

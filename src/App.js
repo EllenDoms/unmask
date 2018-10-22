@@ -28,7 +28,8 @@ class App extends Component {
   }
   componentDidUpdate() {
     let { gameExists, user, games }  = this.props;
-    if(gameExists !== '' && user.loggedIn !== '' && user.games ) {
+    console.log(user.games)
+    if(gameExists && user.loggedIn !== '' && user.games !== '' ) {
       this.props.stopLoading()
     }
     if(user.games && !games) {
@@ -42,7 +43,7 @@ class App extends Component {
     } else if(gameExists === false) {
       // Game in param doesn't exist
       return <NoGame />
-    } else if(gameExists === null) {
+    } else if(gameExists === 'noGame') {
       // No game selected = go to portal
       if(!user.loggedIn) {
         return <Login game='no' />
@@ -63,6 +64,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     loading: state.general.loading,
     gameExists: state.general.gameExists,
