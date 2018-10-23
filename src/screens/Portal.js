@@ -7,17 +7,13 @@ import Header from '../components/Header';
 import GameCard from '../components/GameCard';
 
 class Portal extends Component {
-  renderCards() {
+  renderCards(playing) {
     const { user, games } = this.props;
     if(games) {
-      const gamesArray = Object.keys(games);
-      console.log(gamesArray)
-      function filterPlaying(array) {
-        return array.playing == 'yes';
-      }
-      const gamesArrayPlaying = gamesArray.filter(filterPlaying);
-      console.log(gamesArrayPlaying)
-      return gamesArray.map((game, key) => {
+      console.log(games)
+
+      const gamesSorted = games.sort().reverse()
+      return gamesSorted.map((game, key) => {
         return <GameCard key={key} gameKey={key} />
       })
     }

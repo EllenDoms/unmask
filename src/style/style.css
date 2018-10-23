@@ -71,6 +71,10 @@ button {
   color: #D4AF37;
   border: #D4AF37 1px solid;
 }
+.btn.floating {
+  width: 48px;
+  box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.15);
+}
 .tag {
   background: #D4AF37;
   font-weight: bold;
