@@ -68,9 +68,14 @@ class Game extends Component {
           return <Waiting user={user}  />
         }
       } else {
-        return <Admin user={user} />
+        return (
+          <div>
+            <Header back='true' />
+            <Admin user={user} />
+          </div>
+        )
       }
-    } else if(playing === 'yes') {
+    } else if(playing === 'playing') {
       // game started
       if(user.role === 'team') {
         if(user.alive && score.capulet !== 0 && score.montague !== 0) {
@@ -84,7 +89,6 @@ class Game extends Component {
         } else {
           return(
             <div>
-              <Header back='true' />
               <Score user={user} score={score} />
             </div>
           )
@@ -110,12 +114,17 @@ class Game extends Component {
         }
       }
     } else {
-      // playing === no
+      // playing === not playing
       if(user.role === 'team') {
         return <NoGame />
       } else {
         //admin
-        return <Admin user={user} />
+        return (
+          <div>
+            <Header back='true' />
+            <Admin user={user} />
+          </div>
+        )
       }
     }
   }

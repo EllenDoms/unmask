@@ -11,7 +11,7 @@ class Portal extends Component {
     const { user, games } = this.props;
     if(games) {
       const gamesSorted = games.sort((a, b) => {
-        if (a.playing === 'yes') {
+        if (a.playing === 'playing') {
           return -1;
         }
         return 1;

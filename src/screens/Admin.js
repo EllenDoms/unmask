@@ -13,7 +13,7 @@ class Admin extends Component {
     const { playing, user } = this.props
     if(playing === 'setup') {
       return <NewGame />
-    } else if(playing === 'no') {
+    } else if(playing === 'not playing') {
       return <QR />
     } else if(playing === 'enroll') {
       // if people can enroll, you have to enroll yourself!
@@ -22,7 +22,6 @@ class Admin extends Component {
       } else {
         return (
           <div className='content'>
-            <Header back='true' />
             <div className='container bgWhite'>
               <div id="score">
                 <div className='left'>

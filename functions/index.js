@@ -98,6 +98,9 @@ const processDeath = (uid, game) => {
         })
 
 
+      } else {
+        // score family = 0: game over!
+        admin.database().ref("/games/" + game).child("playing").set('game over');
       }
       return uid
     }).catch(err => console.log(err));
