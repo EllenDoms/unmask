@@ -5,7 +5,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-exports.idied = functions.database.ref('/actions/{uid}/idied')
+exports.dead = functions.database.ref('/actions/{uid}/dead')
     .onCreate((snapshot, context) => {
       const value = snapshot.val();
       const uid = context.params.uid;

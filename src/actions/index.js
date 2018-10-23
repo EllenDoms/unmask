@@ -239,7 +239,7 @@ export function iDied(uid) {
     let { gameExists } = getState().general
     let uid = getState().game.user.id;
 
-    firebase.database().ref(`actions/${uid}/idied`).push().set({game: gameExists})
+    firebase.database().ref(`actions/${uid}/dead`).push().set({game: gameExists})
     dispatch({ type: UPDATE_USER, payload: {alive: false} });
   }
 }
