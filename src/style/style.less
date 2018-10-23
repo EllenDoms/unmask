@@ -8,6 +8,7 @@ out: style.css
 @grey: #F6F6F6;
 @grey2: #C1C7D0;
 @boxShadow: 0px 0 10px 0 rgba(0,0,0,0.15);
+@boxShadowHard: 0px 5px 10px 0 rgba(0,0,0,0.20);
 @transition: all 0.2s ease-out;
 
 * {
@@ -73,6 +74,13 @@ button {
     background-color: transparent;
     color: @primary;
     border: @primary 1px solid;
+  }
+  &.floating {
+    width: 48px;
+    box-shadow: @boxShadowHard;
+    margin: 0 auto;
+    border-radius: 48px;
+    font-size: 20px;
   }
 }
 .tag {

@@ -7,11 +7,13 @@ import Header from '../components/Header';
 import GameCard from '../components/GameCard';
 
 class Portal extends Component {
-  renderCards() {
+  renderCards(playing) {
     const { user, games } = this.props;
     if(games) {
-      const gamesArray = Object.keys(games);
-      return gamesArray.map((game, key) => {
+      console.log(games)
+
+      const gamesSorted = games.sort().reverse()
+      return gamesSorted.map((game, key) => {
         return <GameCard key={key} gameKey={key} />
       })
     }
@@ -19,13 +21,13 @@ class Portal extends Component {
   render() {
     const { user } = this.props;
     if(!user.games) {
-      return (<div>add button</div>)
+      return <button className="btn floating material-icons">add</button>
     } else {
       return (
         <div>
           <Header back='false' title={'Hi, ' + user.name + '!'} />
           <div className='container bgWhite'>
-            <button onClick={() => this.props.newGame()}>add game</button>
+            <button className="btn floating material-icons" onClick={() => this.props.newGame()}>add</button>
             {this.renderCards()}
           </div>
         </div>

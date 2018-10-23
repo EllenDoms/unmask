@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 
-import { startGame, stopGame } from '../actions'
+import { startGame, stopGame } from '../actions';
 
+import Header from '../components/Header';
 import NewGame from './admin/NewGame';
 import EnrollGame from './EnrollGame';
 import QR from './admin/QR';
@@ -21,6 +22,7 @@ class Admin extends Component {
       } else {
         return (
           <div className='content'>
+            <Header back='true' />
             <div className='container bgWhite'>
               <div id="score">
                 <div className='left'>

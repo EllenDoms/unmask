@@ -32,7 +32,6 @@ class EnrollGame extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     gameExists: state.general.gameExists,
     user: state.game.user,
