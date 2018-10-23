@@ -11,6 +11,12 @@ class Portal extends Component {
     const { user, games } = this.props;
     if(games) {
       const gamesArray = Object.keys(games);
+      console.log(gamesArray)
+      function filterPlaying(array) {
+        return array.playing == 'yes';
+      }
+      const gamesArrayPlaying = gamesArray.filter(filterPlaying);
+      console.log(gamesArrayPlaying)
       return gamesArray.map((game, key) => {
         return <GameCard key={key} gameKey={key} />
       })
@@ -19,7 +25,7 @@ class Portal extends Component {
   render() {
     const { user } = this.props;
     if(!user.games) {
-      return (<div>add button</div>)
+      return <button>add game</button>
     } else {
       return (
         <div>

@@ -22,6 +22,7 @@ export function setGame(gameCode) {
 export const newGame = () => (dispatch, getState) => {
   firebase.database().ref('games/').push({
     playing : 'setup',
+    teams: ['Team A', 'Team B'],
     words : ['Ananas', 'Kiwi']
   })
     .then((snapshot) => {
@@ -156,7 +157,7 @@ export const getGames = (games) => (dispatch, getState) => {
           id: snapshot.key,
           playing: snapshot.val().playing,
           role: user.games[game],
-          title: snapshot.val().title,
+          teams: snapshot.val().teams,
         }
         array.push(params);
         dispatch({ type: GET_GAMES, payload: array });

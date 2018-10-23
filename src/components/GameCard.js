@@ -20,9 +20,8 @@ class GameCard extends Component {
         <div className='wrapFlex'>
           <p className='accent'>{myGame.playing === 'yes' ? 'playing' : 'not playing'}</p>
           {this.adminTag(myGame)}
-
         </div>
-        <h2>{myGame.title}</h2>
+        <h2>{myGame.teams[0] + ' vs ' + myGame.teams[1]}</h2>
       </button>
     )
   }

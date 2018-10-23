@@ -26,7 +26,7 @@ class App extends Component {
     });
   }
   componentDidUpdate() {
-    let { gameExists, user, games }  = this.props;
+    let { gameExists, user, games, game }  = this.props;
     if(gameExists && user.loggedIn !== '' && user.games !== '' ) {
       this.props.stopLoading()
     }
@@ -35,7 +35,7 @@ class App extends Component {
     }
   }
   render() {
-    let { loading, gameExists, game, user, userGame }  = this.props;
+    let { loading, gameExists, user, userGame }  = this.props;
     if(loading) {
       return <Loading />
     } else if(gameExists === false) {
@@ -60,13 +60,14 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
+  console.log(state)
   return {
     loading: state.general.loading,
     gameExists: state.general.gameExists,
     user: state.general.user,
     games: state.general.games,
     userGame: state.game.user,
-    game: state.game.game,
+    game: state.game,
 
   };
 }
