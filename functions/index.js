@@ -5,16 +5,15 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-// link oproepen is get call
-exports.idied = functions.https.onCall((data, context) => {
-  const game = data.gameExists;
-  const uid = context.auth.uid;
+exports.idied = functions.database.ref('/actions/{uid}/idied')
+    .onCreate((snapshot, context) => {
+      const value = snapshot.val();
+      const uid = context.params.uid;
+      if(uid && value && value.game){
+        processDeath(uid, game);
+      }
+    });
 
-  if(game && uid){
-    return processDeath(uid, game)
-  }
-  return null;
-});
 const processDeath = (uid, game) => {
   return admin.database().ref("/games/" + game).once('value').then(c => c.val())
     .then(gameInfo => {
