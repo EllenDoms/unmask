@@ -54,7 +54,7 @@ export const newGame = () => (dispatch, getState) => {
 }
 export const saveGameInfo = () => (dispatch, getState) => {
   let gameId = getState().general.gameExists
-  firebase.database().ref('games/' + gameId).child('playing').set('no');
+  firebase.database().ref('games/' + gameId).child('playing').set('not playing');
 }
 export const login = (user) => (dispatch, getState) => {
   if(user === null) { // user not logged in

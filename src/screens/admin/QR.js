@@ -11,7 +11,7 @@ class QR extends Component {
       <div className='content'>
         <Header back='true' />
         <div className='container bgWhite'>
-          <p>Link: https://www.unmask.firebase.com?game={this.props.gameExists} </p>
+          <p>Link: https://www.unmask-50759.firebase.com?game={this.props.gameExists} </p>
         </div>
         <FooterBtn text="Let people enroll" click={() => this.props.startEnroll()} />
       </div>

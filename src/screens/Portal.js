@@ -10,9 +10,13 @@ class Portal extends Component {
   renderCards(playing) {
     const { user, games } = this.props;
     if(games) {
-      console.log(games)
-
-      const gamesSorted = games.sort().reverse()
+      const gamesSorted = games.sort((a, b) => {
+        if (a.playing === 'yes') {
+          return -1;
+        }
+        return 1;
+      })
+      console.log(gamesSorted)
       return gamesSorted.map((game, key) => {
         return <GameCard key={key} gameKey={key} />
       })

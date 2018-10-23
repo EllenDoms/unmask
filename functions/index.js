@@ -114,7 +114,7 @@ exports.stopgame = functions.https.onCall((data, context) => {
   return null;
 });
 const processStop = (uid, game) => {
-  admin.database().ref("/games/" + game + '/').child("playing").set('no');
+  admin.database().ref("/games/" + game + '/').child("playing").set('not playing');
 
   // remove targets + targettedBy
   admin.database().ref("/games/" + game + '/people').once('value').then(c => c.val())
@@ -204,7 +204,7 @@ const processStart = (uid, game) => {
       admin.database().ref("/games/" + game + '/score').set(score);
 
       // let the games begin! (aka game = true)
-      admin.database().ref("/games/" + game + '/').child("playing").set('yes');
+      admin.database().ref("/games/" + game + '/').child("playing").set('playing');
 
     }
     return null;
