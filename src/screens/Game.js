@@ -17,6 +17,7 @@ import Admin from './Admin';
 import NoGame from './NoGame';
 import EnrollGame from './EnrollGame';
 import NewGame from './admin/NewGame';
+import Loading from './Loading';
 
 class Game extends Component {
   constructor(props) {
@@ -57,7 +58,9 @@ class Game extends Component {
   }
   render() {
     let { playing, user, score } = this.props
-    if(playing === 'setup' && user.role ==='admin') {
+    if(!playing) {
+      return <Loading />
+    } else if(playing === 'setup' && user.role ==='admin') {
       return <NewGame />
     } else if(playing === 'enroll') {
       // if playing = enroll (not started): go to waiting page
@@ -75,7 +78,7 @@ class Game extends Component {
           </div>
         )
       }
-    } else if(playing === 'playing') {
+    } else if(playing === 'playing' || playing === 'game over') {
       // game started
       if(user.role === 'team') {
         if(user.alive && score.capulet !== 0 && score.montague !== 0) {
@@ -89,6 +92,7 @@ class Game extends Component {
         } else {
           return(
             <div>
+              <Header back='true' />
               <Score user={user} score={score} />
             </div>
           )
@@ -114,7 +118,7 @@ class Game extends Component {
         }
       }
     } else {
-      // playing === not playing
+      // playing is not playing
       if(user.role === 'team') {
         return <NoGame />
       } else {
@@ -131,7 +135,6 @@ class Game extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     gameExists: state.general.gameExists,
     user: state.game.user,

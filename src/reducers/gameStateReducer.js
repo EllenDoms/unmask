@@ -1,4 +1,4 @@
-import { GAME_STATUS, SCORE_STATUS, UPDATE_USER } from "../actions/types";
+import { GAME_STATUS, SCORE_STATUS, UPDATE_USER, UPDATE_INFO } from "../actions/types";
 
 const initialState = {
   user: {
@@ -27,6 +27,8 @@ export default function gameStateReducer (state = initialState, action) {
       return { ...state, score: action.payload }
     case UPDATE_USER :
       return { ...state, user: {...state.user, ...action.payload} }
+    case UPDATE_INFO :
+      return { ...state, teams: action.teams, words: action.words }
     default:
       return state;
   }

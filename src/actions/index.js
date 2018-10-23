@@ -1,4 +1,4 @@
-import { SET_GAME, USERS_ENROLMENT, LOGIN_USER, GET_GAMES, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER } from './types.js';
+import { SET_GAME, USERS_ENROLMENT, LOGIN_USER, GET_GAMES, LOADING, GAME_STATUS, SCORE_STATUS, UPDATE_USER, UPDATE_INFO } from './types.js';
 import * as firebase from "firebase";
 import { database } from '../config/firebase';
 import history from '../auth/history';
@@ -20,16 +20,15 @@ export function setGame(gameCode) {
 }
 
 export const newGame = () => (dispatch, getState) => {
+
   firebase.database().ref('games/').push({
     playing : 'setup',
     teams: ['Team A', 'Team B'],
     words : ['Ananas', 'Kiwi']
-  })
-    .then((snapshot) => {
+  }).then((snapshot) => {
       let game = snapshot.key;
       firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
-
           let params = {
             id: user.uid,
             role: 'admin',
@@ -51,6 +50,19 @@ export const newGame = () => (dispatch, getState) => {
         }
       })
   })
+}
+
+export const getGameInfo = () => (dispatch, getState) => {
+  console.log('getting game info')
+  let gameId = getState().general.gameExists;
+  console.log(gameId)
+  firebase.database().ref('games/' + gameId).once('value')
+  .then(snapshot => {
+    if (snapshot.val()) {
+      dispatch({ type: UPDATE_INFO, teams: snapshot.val().teams, words: snapshot.val().words });
+    }
+  })
+
 }
 export const saveGameInfo = () => (dispatch, getState) => {
   let gameId = getState().general.gameExists

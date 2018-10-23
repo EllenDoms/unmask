@@ -60,7 +60,6 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state)
   return {
     loading: state.general.loading,
     gameExists: state.general.gameExists,
