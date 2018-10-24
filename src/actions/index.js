@@ -51,7 +51,6 @@ export const newGame = () => (dispatch, getState) => {
       })
   })
 }
-
 export const getGameInfo = () => (dispatch, getState) => {
   console.log('getting game info')
   let gameId = getState().general.gameExists;
@@ -64,9 +63,14 @@ export const getGameInfo = () => (dispatch, getState) => {
   })
 
 }
-export const saveGameInfo = () => (dispatch, getState) => {
+export const saveGameInfo = (values) => (dispatch, getState) => {
+  console.log('saving game info: ', values)
+  const params = {
+    teams: [values.team1, values.team2]
+  }
   let gameId = getState().general.gameExists
-  firebase.database().ref('games/' + gameId).child('playing').set('not playing');
+  firebase.database().ref('games/' + gameId).update(params);
+  // firebase.database().ref('games/' + gameId).child('playing').set('not playing');
 }
 export const login = (user) => (dispatch, getState) => {
   if(user === null) { // user not logged in

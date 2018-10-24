@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { getGameInfo, saveGameInfo } from '../../actions';
+import { Field, reduxForm } from 'redux-form';
 
 import FooterBtn from '../../components/FooterBtn';
 import Header from '../../components/Header';
@@ -11,26 +12,38 @@ class NewGame extends Component {
   componentDidMount(){
     this.props.getGameInfo();
   }
+  renderField(field) {
+    return (
+      <div>
+        <label>{field.label}</label>
+        <input type={field.type} {...field.input} ></input>
+      </div>
+    )
+  }
   loadWords(){
     const { game, games} = this.props;
   }
+  onSubmit = (values) => {
+    console.log(values);
+    this.props.saveGameInfo(values);
+  }
   render() {
-    const { game, games} = this.props;
+    const { game, games, handleSubmit} = this.props;
     if(!game.teams) {
       return <Loading />
     } else {
       return (
         <div className='content'>
           <Header back='true' />
-          <form className='container bgWhite'>
-            <label>Teamname 1</label>
-            <input placeholder={game.teams[0]}></input>
-            <label>Teamname 2</label>
-            <input placeholder={game.teams[1]}></input>
-            <label>Words</label>
-            {/* {this.loadWords()} */}
+          <form onSubmit={handleSubmit(this.onSubmit)}>
+            <div className='container bgWhite'>
+              <Field label='Teamname 1' name='team1' type="text" component={this.renderField} />
+              <Field label='Teamname 2' name='team2' type="text" component={this.renderField} />
+              <label>Words</label>
+              {/* {this.loadWords()} */}
+            </div>
+            <FooterBtn text="Save game" type='submit' />
           </form>
-          <FooterBtn text="Save game" click={() => this.props.saveGameInfo()} />
         </div>
       )
     }
@@ -39,7 +52,6 @@ class NewGame extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.game)
   return {
     loggedIn: state.general.loggedIn,
     game: state.game,
@@ -47,4 +59,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getGameInfo, saveGameInfo })(NewGame);
+export default reduxForm({
+  form: 'NewGame',
+  initialValues: { team1: "Phone" }
+})(
+  connect(mapStateToProps, { getGameInfo, saveGameInfo }) (NewGame)
+);

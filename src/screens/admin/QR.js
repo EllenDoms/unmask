@@ -9,7 +9,6 @@ class QR extends Component {
   render() {
     return (
       <div className='content'>
-        <Header back='true' />
         <div className='container bgWhite'>
           <p>Link: https://www.unmask-50759.firebase.com?game={this.props.gameExists} </p>
         </div>
