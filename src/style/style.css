@@ -45,6 +45,9 @@ p {
   line-height: 24px;
   margin: 10px 0px;
 }
+.material-icons {
+  color: #C1C7D0;
+}
 .small {
   font-size: 12px;
 }
@@ -84,6 +87,9 @@ button {
   color: #fff;
   padding: 0 10px;
   border-radius: 15px;
+}
+label {
+  margin-top: 10px;
 }
 .container {
   width: calc(100% - 60px);
@@ -192,6 +198,29 @@ button {
 .content #score .right {
   flex: 1;
 }
+.content form input {
+  border: solid 1px #C1C7D0;
+  line-height: 48px;
+  width: calc(100% - 20px);
+  padding: 0px 10px;
+  margin: 5px 0px;
+  border-radius: 4px;
+}
+.content form .wordsWrapper {
+  display: flex;
+  flex-direction: column;
+}
+.content form .wordWrapper {
+  display: flex;
+}
+.content form .wordWrapper .fieldWrapper {
+  width: calc(100% - 48px);
+}
+.content form .material-icons {
+  width: 48px;
+  line-height: 48px;
+  margin: 0 auto;
+}
 .footer {
   position: fixed;
   width: 100vw;
@@ -214,6 +243,12 @@ button {
 }
 .footer .nav-item.active {
   color: #D4AF37;
+}
+.footer .nav-item.active .material-icons {
+  color: #D4AF37;
+}
+.footer .nav-item .material-icons {
+  color: #65696F;
 }
 /*** CARD ***/
 .card {

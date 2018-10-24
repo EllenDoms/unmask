@@ -10,7 +10,7 @@ import Loading from '../Loading';
 
 const renderField = (field) => {
   return(
-    <div>
+    <div className='fieldWrapper'>
       <label>{field.label}</label>
       <input type='text' {...field.input} ></input>
     </div>
@@ -18,10 +18,10 @@ const renderField = (field) => {
 }
 const renderWordFields = ({ fields, meta: { error } }) => {
   return(
-    <div>
+    <div className='wordsWrapper'>
       {fields.map((word, index) => {
         return(
-          <div key={index}>
+          <div key={index} className='wordWrapper'>
             <Field name={word} type="text" component={renderField} />
             <div className='material-icons center' onClick={() => fields.remove(index)}>delete</div>
           </div>
@@ -40,7 +40,7 @@ class EditGame extends Component {
     this.props.saveGameInfo(values);
   }
   render() {
-    const { game, games, handleSubmit} = this.props;
+    const { game, handleSubmit} = this.props;
     console.log(this.props.initialValues.words)
     if(!game.teams) {
       return <Loading />
@@ -72,9 +72,7 @@ let InitializeFromStateForm = reduxForm({
 function mapStateToProps(state) {
   console.log(state)
   return {
-    loggedIn: state.general.loggedIn,
     game: state.game,
-    games: state.general.games,
     initialValues: {
       team1: state.game.teams[0],
       team2: state.game.teams[1],
