@@ -66,7 +66,8 @@ export const getGameInfo = () => (dispatch, getState) => {
 export const saveGameInfo = (values) => (dispatch, getState) => {
   console.log('saving game info: ', values)
   const params = {
-    teams: [values.team1, values.team2]
+    teams: [values.team1, values.team2],
+    words: values.words
   }
   let gameId = getState().general.gameExists
   firebase.database().ref('games/' + gameId).update(params);

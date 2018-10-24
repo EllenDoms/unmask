@@ -4,15 +4,15 @@ import { connect } from "react-redux";
 import { startGame, stopGame } from '../actions';
 
 import Header from '../components/Header';
-import NewGame from './admin/NewGame';
+import SetupGame from './SetupGame';
 import EnrollGame from './EnrollGame';
-import QR from './admin/QR';
+import QR from './setup/QR';
 
 class Admin extends Component {
   render() {
     const { playing, user } = this.props
     if(playing === 'setup') {
-      return <NewGame />
+      return <SetupGame />
     } else if(playing === 'not playing') {
       return <QR />
     } else if(playing === 'enroll') {

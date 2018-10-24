@@ -10,14 +10,6 @@ import TooLate from './enrollGame/TooLate';
 import Enroll from './enrollGame/Enroll';
 
 class EnrollGame extends Component {
-  componentDidMount() {
-    if(this.props.gameCode) {
-      // listener game status
-      // firebase.database().ref( this.props.gameCode + '/game').on('value', snapshot => {
-      //   this.props.gameStatus(snapshot.val());
-      // });
-    }
-  }
   render() {
     let { loading, gameExists, loggedIn, game, user }  = this.props;
 

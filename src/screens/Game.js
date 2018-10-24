@@ -16,7 +16,7 @@ import Die from './game/Die';
 import Admin from './Admin';
 import NoGame from './NoGame';
 import EnrollGame from './EnrollGame';
-import NewGame from './admin/NewGame';
+import SetupGame from './SetupGame';
 import Loading from './Loading';
 
 class Game extends Component {
@@ -61,7 +61,7 @@ class Game extends Component {
     if(!playing) {
       return <Loading />
     } else if(playing === 'setup' && user.role ==='admin') {
-      return <NewGame />
+      return <SetupGame />
     } else if(playing === 'enroll') {
       // if playing = enroll (not started): go to waiting page
       if(user.role === 'team') {

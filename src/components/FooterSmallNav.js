@@ -20,7 +20,6 @@ export default class FooterNav extends Component {
           <div className="material-icons">show_chart</div>
           <div className="label">Score</div>
         </button>
-        {this.renderAdmin()}
       </div>
     )
   }
