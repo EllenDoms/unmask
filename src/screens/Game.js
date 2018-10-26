@@ -18,6 +18,7 @@ import NoGame from './NoGame';
 import EnrollGame from './EnrollGame';
 import SetupGame from './SetupGame';
 import Loading from './Loading';
+import TooLate from './game/TooLate';
 
 class Game extends Component {
   constructor(props) {
@@ -81,19 +82,26 @@ class Game extends Component {
     } else if(playing === 'playing' || playing === 'game over') {
       // game started
       if(user.role === 'team') {
-        if(user.alive && score.capulet !== 0 && score.montague !== 0) {
+        if(!user.alive || score.capulet === 0 || score.montague === 0) {
+          return(
+            <div>
+              <Header back='true' />
+              <Score user={user} score={score} />
+            </div>
+          )
+        } else if (!user.enrolled) {
+          return (
+            <div>
+              <Header back='true' />
+              <TooLate user={this.props.user} score={this.props.score} />
+            </div>
+          )
+        } else {
           return (
             <div>
               <Header back='true' />
               {this.renderpage(this.state.active)}
               <FooterNav admin={user.role} active={this.state.active} action={this.setActive} />
-            </div>
-          )
-        } else {
-          return(
-            <div>
-              <Header back='true' />
-              <Score user={user} score={score} />
             </div>
           )
         }

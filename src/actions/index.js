@@ -99,6 +99,7 @@ export const login = (user) => (dispatch, getState) => {
     })
     // check if there is a game...
     let { gameExists } = getState().general;
+    console.log(gameExists)
     if (gameExists && gameExists !== 'noGame') {
       dispatch(loginGame(user, gameExists))
     }
@@ -155,7 +156,6 @@ export const loginGame = (user, gameExists) => (dispatch, getState) => {
   });
 }
 export const logout = () => (dispatch, getState) => {
-  console.log(getState())
   let userId = getState().general.user.uid
   firebase.auth().signOut().then(function() {
     firebase.database().ref('/people/' + userId).child('/loggedIn').set(false);
