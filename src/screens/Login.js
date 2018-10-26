@@ -14,7 +14,8 @@ class Login extends Component {
     }).catch(function(error) { console.log(error) });
   }
   render() {
-    if(this.props.game === 'yes') {
+    const { game } = this.props
+    if(game === 'yes') {
       return (
         <div className='content'>
           <div className='container bgWhite'>

@@ -154,7 +154,7 @@ export const loginGame = (user, gameExists) => (dispatch, getState) => {
   });
 }
 export const logout = () => (dispatch, getState) => {
-  let userId = getState().data.user.id
+  let userId = getState().general.user.id
   firebase.auth().signOut().then(function() {
     firebase.database().ref('/people/' + userId).child('/loggedIn').set(false);
     dispatch({ type: LOGIN_USER, payload: false });
