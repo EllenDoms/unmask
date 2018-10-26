@@ -91,7 +91,8 @@ export const login = (user) => (dispatch, getState) => {
           fbPhotoUrl: user.photoURL,
           name: user.displayName,
           games: []
-        }
+        };
+        console.log(params)
         firebase.database().ref('/people/' + user.uid).set(params);
         dispatch({ type: LOGIN_USER, payload: params });
       }
@@ -154,7 +155,8 @@ export const loginGame = (user, gameExists) => (dispatch, getState) => {
   });
 }
 export const logout = () => (dispatch, getState) => {
-  let userId = getState().general.user.id
+  console.log(getState())
+  let userId = getState().general.user.uid
   firebase.auth().signOut().then(function() {
     firebase.database().ref('/people/' + userId).child('/loggedIn').set(false);
     dispatch({ type: LOGIN_USER, payload: false });
