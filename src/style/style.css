@@ -193,6 +193,7 @@ label {
   align-items: center;
   flex-direction: row;
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 .content #score .left,
 .content #score .right {
@@ -226,6 +227,7 @@ label {
   width: 100vw;
   bottom: 0;
   display: flex;
+  justify-content: space-evenly;
   height: 83px;
   background-color: #FFF;
   box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.15);
@@ -255,7 +257,8 @@ label {
   background: #FFFFFF;
   box-shadow: 0px 0 10px 0 rgba(0, 0, 0, 0.15);
   width: 100%;
-  margin-top: 30px;
+  max-width: 500px;
+  margin: 30px auto 0 auto;
   padding: 10px 20px 20px 16px;
   text-align: left;
   border-left: 4px solid #FFF;
