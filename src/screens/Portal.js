@@ -25,7 +25,14 @@ class Portal extends Component {
   render() {
     const { user } = this.props;
     if(!user.games) {
-      return <button className="btn floating material-icons">add</button>
+      return (
+        <div>
+          <Header back='false' title={'Hi, ' + user.name + '!'} />
+          <div className='container bgWhite'>
+            <button className="btn floating material-icons" onClick={() => this.props.newGame()}>add</button>
+          </div>
+        </div>
+      )
     } else {
       return (
         <div>

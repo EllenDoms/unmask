@@ -10,7 +10,7 @@ class QR extends Component {
     return (
       <div className='content'>
         <div className='container bgWhite'>
-          <p>Link: https://www.unmask-50759.firebase.com?game={this.props.gameExists} </p>
+          <p>Link: https://unmask-50759.firebaseapp.com?game={this.props.gameExists} </p>
           <button className='btn' onClick={() => this.props.startEnroll()} >Start enrolling people!</button>
         </div>
       </div>

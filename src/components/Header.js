@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import history from '../auth/history';
 
+import { logout } from '../actions';
+
 class Header extends Component {
   onClickBack() {
     history.push('/');
@@ -15,7 +17,7 @@ class Header extends Component {
           {this.props.back ==='true' ? 'arrow_back' : ' '}
         </button>
         <h3 className='center'>{this.props.title ? this.props.title : ' '}</h3>
-        <img className='right icon avatar avatarTiny' src={user.fbPhotoUrl} />
+        <img className='right icon avatar avatarTiny' src={user.fbPhotoUrl} onClick={() => this.props.logout()} />
       </div>
     )
   }
@@ -27,4 +29,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { logout })(Header);
