@@ -141,6 +141,7 @@ label {
 .avatar .avatarEmptyLabel {
   background-color: #F6F6F6;
   width: 100%;
+  margin: 0;
 }
 .avatar .avatarEmptyLabel .material-icons {
   width: 100%;

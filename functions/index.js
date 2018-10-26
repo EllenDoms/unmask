@@ -6,13 +6,13 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 
 exports.dead = functions.database.ref('/actions/{uid}/dead')
-    .onCreate((snapshot, context) => {
-      const value = snapshot.val();
-      const uid = context.params.uid;
-      if(uid && value && value.game){
-        processDeath(uid, game);
-      }
-    });
+  .onCreate((snapshot, context) => {
+    const value = snapshot.val();
+    const uid = context.params.uid;
+    if(uid && value && value.game){
+      processDeath(uid, value.game);
+    }
+  });
 
 const processDeath = (uid, game) => {
   return admin.database().ref("/games/" + game).once('value').then(c => c.val())
@@ -116,6 +116,14 @@ exports.stopgame = functions.https.onCall((data, context) => {
 
   return null;
 });
+// exports.stopGame = functions.database.ref('/actions/{uid}/stop')
+//   .onCreate((snapshot, context) => {
+//     const value = snapshot.val();
+//     const uid = context.params.uid;
+//     if(uid && value && value.game){
+//       processStop(uid, value.game);
+//     }
+//   });
 const processStop = (uid, game) => {
   admin.database().ref("/games/" + game + '/').child("playing").set('not playing');
 
