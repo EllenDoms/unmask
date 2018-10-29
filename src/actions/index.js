@@ -20,7 +20,6 @@ export function setGame(gameCode) {
 }
 
 export const newGame = () => (dispatch, getState) => {
-
   firebase.database().ref('games/').push({
     playing : 'setup',
     teams: ['Team A', 'Team B'],
@@ -37,7 +36,7 @@ export const newGame = () => (dispatch, getState) => {
             family: '',
             selfieUrl: '',
             targettedBy: [],
-            alive: true,
+            alive: false,
           }
           firebase.database().ref('games/' + game + '/people/' + user.uid).update(params);
           dispatch({ type: UPDATE_USER, payload: params, });
@@ -79,8 +78,9 @@ export const login = (user) => (dispatch, getState) => {
   } else {
     // add user to people
     database.ref('/people/' + user.uid).once('value')
-    .then(snapshot => snapshot.val()).then(val => {
-      if(val) {
+    .then(snapshot => {
+      let val = snapshot.val();
+      if(val && val.uid) {
         val.loggedIn = true;
         dispatch({ type: LOGIN_USER, payload: val });
         firebase.database().ref('/people/' + user.uid).child('/loggedIn').set(true);
@@ -92,14 +92,12 @@ export const login = (user) => (dispatch, getState) => {
           name: user.displayName,
           games: []
         };
-        console.log(params)
         firebase.database().ref('/people/' + user.uid).set(params);
         dispatch({ type: LOGIN_USER, payload: params });
       }
     })
     // check if there is a game...
     let { gameExists } = getState().general;
-    console.log(gameExists)
     if (gameExists && gameExists !== 'noGame') {
       dispatch(loginGame(user, gameExists))
     }
@@ -107,7 +105,6 @@ export const login = (user) => (dispatch, getState) => {
 };
 export const loginGame = (user, gameExists) => (dispatch, getState) => {
   let game = 'games/' + gameExists
-  console.log(game)
   // if game exists
   // add/update person to game
   firebase.database().ref( game + '/people/').once('value')
@@ -135,6 +132,7 @@ export const loginGame = (user, gameExists) => (dispatch, getState) => {
       firebase.database().ref(game + '/people/' + user.uid).update(params);
       dispatch({ type: UPDATE_USER, payload: params, });
     }
+
     // add this game to the person's games with role
     firebase.database().ref( '/people/' + user.uid + '/games/').child(gameExists).set(role);
   })

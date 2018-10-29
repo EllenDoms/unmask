@@ -149,10 +149,10 @@ const processStart = (uid, game) => {
     const wordsArray = Object.keys(wordsData).map((key) => wordsData[key])
     const allPeopleArray = Object.keys(peopleData).map((key) => peopleData[key])
 
-    //array only with enrolled people
+    //array only with enrolled people and not the admin?
     const peopleArray = [];
     allPeopleArray.map(person => {
-      if(person.enrolled) {
+      if(person.enrolled && person.role !== 'admin') {
         peopleArray.push(person);
       }
     })
@@ -189,6 +189,7 @@ const processStart = (uid, game) => {
       }
       admin.database().ref("/games/" + game + '/people/' + selectedID + '/family').set(family);
       admin.database().ref("/games/" + game + '/people/' + selectedID + '/alive').set(true);
+
       // target word is random from array + add photo from target
       target.word = wordsArray[Math.floor(Math.random()*wordsArray.length)];
       target.selfieUrl = peopleData[target.uid].selfieUrl;

@@ -8,7 +8,7 @@ import FooterBtn from '../components/FooterBtn';
 
 class Login extends Component {
   login() {
-    auth().signInWithPopup(provider).then(result => {
+    auth().signInWithRedirect(provider).then(result => {
       var user = result.user;
       this.props.login(user)
     }).catch(function(error) { console.log(error) });

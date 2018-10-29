@@ -16,7 +16,7 @@ export default class Target extends Component {
         <div className='container bgWhite'>
           <img className="avatar avatarBig centerImage" src={activeTarget.selfieUrl} alt='profilePicture' />
           <p className='center'>Make <b>{activeTarget.name}</b> say</p>
-          <h1>{activeTarget.word}</h1>
+          <h2>{activeTarget.word}</h2>
         </div>
       )
     } else {
