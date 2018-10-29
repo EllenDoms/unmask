@@ -272,36 +272,46 @@ label {
   justify-content: space-between;
 }
 /*** LOADING ***/
-.lds-ripple {
+.spinner {
+  width: 40px;
+  height: 40px;
   position: relative;
-  transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
-  width: 58px;
-  height: 58px;
+  margin: 100px auto;
 }
-.lds-ripple div {
-  box-sizing: content-box;
-  position: absolute;
-  border: 4px solid #D4AF37;
-  opacity: 1;
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
-  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  background-color: #D4AF37;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: sk-bounce 2s infinite ease-in-out;
+  animation: sk-bounce 2s infinite ease-in-out;
 }
-.lds-ripple div:nth-child(2) {
-  animation-delay: -0.5s;
+.double-bounce2 {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
 }
-@keyframes lds-ripple {
-  0% {
-    top: 28px;
-    left: 28px;
-    width: 0;
-    height: 0;
-    opacity: 1;
-  }
+@-webkit-keyframes sk-bounce {
+  0%,
   100% {
-    top: -1px;
-    left: -1px;
-    width: 58px;
-    height: 58px;
-    opacity: 0;
+    -webkit-transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+  }
+}
+@keyframes sk-bounce {
+  0%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
   }
 }
