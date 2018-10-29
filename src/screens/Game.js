@@ -61,8 +61,6 @@ class Game extends Component {
     let { playing, user, score } = this.props
     if(!playing) {
       return <Loading />
-    } else if(playing === 'setup' && user.role ==='admin') {
-      return <SetupGame />
     } else if(playing === 'enroll') {
       // if playing = enroll (not started): go to waiting page
       if(user.role === 'team') {
@@ -131,12 +129,7 @@ class Game extends Component {
         return <NoGame />
       } else {
         //admin
-        return (
-          <div>
-            <Header back='true' />
-            <Admin user={user} />
-          </div>
-        )
+        return <Admin user={user} />
       }
     }
   }

@@ -14,7 +14,7 @@ class ScoreComponent extends Component {
         <div className='greyBg container center'>
           <h1>Game over!</h1>
           <h2>The {winner} won!</h2>
-
+          
         </div>
       )
     } else {

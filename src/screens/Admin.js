@@ -11,10 +11,8 @@ import QR from './setup/QR';
 class Admin extends Component {
   render() {
     const { playing, user } = this.props
-    if(playing === 'setup') {
+    if(playing === 'setup' || playing === 'not playing') {
       return <SetupGame />
-    } else if(playing === 'not playing') {
-      return <QR />
     } else if(playing === 'enroll') {
       // if people can enroll, you have to enroll yourself!
       if(user.enrolled !== true) {

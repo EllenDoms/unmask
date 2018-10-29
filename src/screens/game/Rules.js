@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 const ruleItems = [
   'Keep your family a secret.',
   'On the other tab you can find your target and a secret word.',
-  'Find your target, trick him/her into saying the word.',
+  'Find your target, trick him/her into saying the word without using it yourself (english or dutch).',
   'Done? You killed this person, you can tell him/her that you did.',
   'You get a new target.',
   'Watch out! Someone is hunting for you too, if you say their forbidden word, you are dead.'
