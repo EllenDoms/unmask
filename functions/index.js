@@ -5,8 +5,10 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-exports.dead = functions.database.ref('/actions/{uid}/dead')
+exports.dead = functions.database.ref('/actions/{uid}/dead/{pushId}')
   .onCreate((snapshot, context) => {
+    console.log(snapshot.val())
+    console.log(context.params.uid)
     const value = snapshot.val();
     const uid = context.params.uid;
     if(uid && value && value.game){
@@ -106,24 +108,14 @@ const processDeath = (uid, game) => {
     }).catch(err => console.log(err));
 }
 
-exports.stopgame = functions.https.onCall((data, context) => {
-  const game = data.gameExists;
-  const uid = context.auth.uid;
-
-  if(game && uid){
-    return processStop(uid, game)
-  }
-
-  return null;
-});
-// exports.stopGame = functions.database.ref('/actions/{uid}/stop')
-//   .onCreate((snapshot, context) => {
-//     const value = snapshot.val();
-//     const uid = context.params.uid;
-//     if(uid && value && value.game){
-//       processStop(uid, value.game);
-//     }
-//   });
+exports.stopGame = functions.database.ref('/actions/{uid}/stop/{pushId}')
+  .onCreate((snapshot, context) => {
+    const value = snapshot.val();
+    const uid = context.params.uid;
+    if(uid && value && value.game){
+      processStop(uid, value.game);
+    }
+  });
 const processStop = (uid, game) => {
   admin.database().ref("/games/" + game + '/').child("playing").set('not playing');
 
@@ -140,16 +132,14 @@ const processStop = (uid, game) => {
 
 }
 
-exports.startgame = functions.https.onCall((data, context) => {
-  const game = data.gameExists;
-  const uid = context.auth.uid;
-
-  if(game && uid){
-    return processStart(uid, game)
-  }
-
-  return null;
-})
+exports.startGame = functions.database.ref('/actions/{uid}/start/{pushId}')
+  .onCreate((snapshot, context) => {
+    const value = snapshot.val();
+    const uid = context.params.uid;
+    if(uid && value && value.game){
+      processStart(uid, value.game);
+    }
+  });
 const processStart = (uid, game) => {
   admin.database().ref("/games/" + game + '/').once('value').then(function(snapshot) {
     const peopleData = snapshot.val().people;

@@ -238,19 +238,18 @@ export function startEnroll() {
 export function startGame(start) {
   return function(dispatch, getState) {
     let { gameExists } = getState().general;
+    let uid = getState().game.user.id;
 
-    // loading until gamestatus changed?
     dispatch({ type: LOADING, payload: true });
-    let startGame = firebase.functions().httpsCallable('startgame');
-    startGame({gameExists});
+    firebase.database().ref(`actions/${uid}/start`).push().set({game: gameExists});
   }
 }
 export function stopGame() {
   return function(dispatch, getState) {
     let { gameExists } = getState().general;
+    let uid = getState().game.user.id;
 
-    let stopGame = firebase.functions().httpsCallable('stopgame');
-    stopGame({gameExists})
+    firebase.database().ref(`actions/${uid}/stop`).push().set({game: gameExists});
     dispatch({ type: GAME_STATUS, payload: 'no' });
   }
 }

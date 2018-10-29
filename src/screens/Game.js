@@ -112,7 +112,7 @@ class Game extends Component {
             <div>
               <Header back='true' />
               {this.renderpageSmall(this.state.active)}
-              <FooterSmallNav role={this.props.user.role} active={this.state.active} action={this.setActive} />
+              <FooterSmallNav role={user.role} active={this.state.active} action={this.setActive} />
             </div>
           )
         } else {

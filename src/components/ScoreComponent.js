@@ -12,7 +12,7 @@ class ScoreComponent extends Component {
       let winner = capulet === 0 ? "Montagues" : "Capulets";
       return (
         <div className='greyBg container center'>
-          <p>Game over!</p>
+          <h1>Game over!</h1>
           <h2>The {winner} won!</h2>
 
         </div>
