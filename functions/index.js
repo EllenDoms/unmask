@@ -10,12 +10,9 @@ exports.dead = functions.database.ref('/actions/{uid}/dead/{pushId}')
     const value = snapshot.val();
     const uid = context.params.uid;
     if(uid && value && value.game){
-      console.log(uid)
-      console.log(value.game)
       processDeath(uid, value.game);
     }
   });
-
 const processDeath = (uid, game) => {
   return admin.database().ref("/games/" + game).once('value').then(c => c.val())
     .then(gameInfo => {
@@ -36,6 +33,7 @@ const processDeath = (uid, game) => {
         if(person.enrolled && person.role !== 'admin') {
           peopleArray.push(person);
         }
+        return null;
       })
 
       // Alive: false
@@ -69,24 +67,20 @@ const processDeath = (uid, game) => {
           // list all people
           let newTargetPerson = '';
           let i = 0;
-          while(newTargetPerson === '') {
-            peopleArray.forEach(person => {
-              console.log(person);
-              if(!person.targettedBy) {
-                newTargetPerson = person
-              } else {
-                const targettedByArray = Object.keys(person.targettedBy).map((key) => person.targettedBy[key]);
-                console.log(targettedByArray.length)
-                console.log(i)
-                if(targettedByArray.length === i && person.alive === true && person.family === family && person.id !== loser.id && person.role !== 'admin') {
-                  newTargetPerson = person;
-                }
+          function findPerson(person) {
+            if(!person.targettedBy) {
+              newTargetPerson = person
+            } else {
+              const targettedByArray = Object.keys(person.targettedBy).map((key) => person.targettedBy[key]);
+              if(targettedByArray.length === i && person.alive === true && person.family === family && person.id !== loser.id && person.role !== 'admin') {
+                newTargetPerson = person;
               }
-            })
-            i++;
-            console.log(newTargetPerson)
+            }
           }
-          console.log('go on')
+          while(newTargetPerson === '') {
+            peopleArray.forEach(findPerson)
+            i++;
+          }
 
           // Random word
           let newWord = wordsArray[Math.floor(Math.random()*wordsArray.length)];
@@ -110,7 +104,7 @@ const processDeath = (uid, game) => {
         // score family = 0: game over!
         admin.database().ref("/games/" + game).child("playing").set('game over');
       }
-      return null
+      return 0;
     }).catch(err => console.log(err));
 }
 
@@ -133,9 +127,9 @@ const processStop = (uid, game) => {
         admin.database().ref("/games/" + game + "/people/" + person.id + '/targets').remove();
         admin.database().ref("/games/" + game + "/people/" + person.id + '/targettedBy').remove();
       })
-      return uid;
+      return 0;
     }).catch(err => console.log(err));
-
+  return 0;
 }
 
 exports.start = functions.database.ref('/actions/{uid}/start/{pushId}')
@@ -147,7 +141,7 @@ exports.start = functions.database.ref('/actions/{uid}/start/{pushId}')
     }
   });
 const processStart = (uid, game) => {
-  admin.database().ref("/games/" + game + '/').once('value').then(function(snapshot) {
+  admin.database().ref("/games/" + game + '/').once('value').then(snapshot => {
     const peopleData = snapshot.val().people;
     const wordsData = snapshot.val().words;
 
@@ -161,6 +155,7 @@ const processStart = (uid, game) => {
       if(person.enrolled && person.role !== 'admin') {
         peopleArray.push(person);
       }
+      return 0;
     })
 
     // randomize array with people
@@ -215,6 +210,6 @@ const processStart = (uid, game) => {
       admin.database().ref("/games/" + game + '/').child("playing").set('playing');
 
     }
-    return null;
+    return 0;
   }).catch(err => console.log(err));
 }
