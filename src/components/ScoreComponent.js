@@ -13,8 +13,8 @@ class ScoreComponent extends Component {
       return (
         <div className='greyBg container center'>
           <h1>Game over!</h1>
-          <h2>The {winner} won!</h2>
-          
+          <h2 className='center'>The {winner} won!</h2>
+
         </div>
       )
     } else {

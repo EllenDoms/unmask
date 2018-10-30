@@ -7,11 +7,11 @@ admin.initializeApp();
 
 exports.dead = functions.database.ref('/actions/{uid}/dead/{pushId}')
   .onCreate((snapshot, context) => {
-    console.log(snapshot.val())
-    console.log(context.params.uid)
     const value = snapshot.val();
     const uid = context.params.uid;
     if(uid && value && value.game){
+      console.log(uid)
+      console.log(value.game)
       processDeath(uid, value.game);
     }
   });
@@ -33,7 +33,7 @@ const processDeath = (uid, game) => {
       //array only with enrolled people
       const peopleArray = [];
       allPeopleArray.map(person => {
-        if(person.enrolled) {
+        if(person.enrolled && person.role !== 'admin') {
           peopleArray.push(person);
         }
       })
@@ -65,24 +65,29 @@ const processDeath = (uid, game) => {
           // Every winner gets loser success on true
           admin.database().ref("/games/" + game + "/people/" + winnerId + '/targets/' + loser.id ).child("success").set(true);
 
-          // Find first person with least amount of targettedBy + alive + same family as former target
-          let newTargetPerson = "";
-          peopleArray.find(person => {
-            if(!person.targettedBy && person.alive === true && person.family === family && person.id !== loser.id) {
-              newTargetPerson = person;
-            } else {
-              let leastTargettedBy = 1;
-              do {
-                const targettedByArray = Object.keys(person.targettedBy).map((key) => person.targettedBy[key])
-                newTargetPerson = peopleArray.find(person => {
-                  return targettedByArray.length === leastTargettedBy && person.alive === true && person.family === family && person.id !== loser.id;
-                });
-                leastTargettedBy++;
+          // Find first person with least amount of targettedBy + alive + same family as former target + not admin + not loser
+          // list all people
+          let newTargetPerson = '';
+          let i = 0;
+          while(newTargetPerson === '') {
+            peopleArray.forEach(person => {
+              console.log(person);
+              if(!person.targettedBy) {
+                newTargetPerson = person
+              } else {
+                const targettedByArray = Object.keys(person.targettedBy).map((key) => person.targettedBy[key]);
+                console.log(targettedByArray.length)
+                console.log(i)
+                if(targettedByArray.length === i && person.alive === true && person.family === family && person.id !== loser.id && person.role !== 'admin') {
+                  newTargetPerson = person;
+                }
               }
-              while (newTargetPerson === "");
-            }
+            })
+            i++;
+            console.log(newTargetPerson)
+          }
+          console.log('go on')
 
-          })
           // Random word
           let newWord = wordsArray[Math.floor(Math.random()*wordsArray.length)];
           // Every winner gets new target
@@ -95,6 +100,7 @@ const processDeath = (uid, game) => {
           }
           // length of targetlist?
           admin.database().ref("/games/" + game + "/people/" + winnerId + "/targets").push(newTarget);
+
           // Add winner to targettedBy newTarget
           admin.database().ref("/games/" + game + "/people/" + newTargetPerson.id + '/targettedBy').push(winnerId);
         })
@@ -104,11 +110,11 @@ const processDeath = (uid, game) => {
         // score family = 0: game over!
         admin.database().ref("/games/" + game).child("playing").set('game over');
       }
-      return uid
+      return null
     }).catch(err => console.log(err));
 }
 
-exports.stopGame = functions.database.ref('/actions/{uid}/stop/{pushId}')
+exports.stop = functions.database.ref('/actions/{uid}/stop/{pushId}')
   .onCreate((snapshot, context) => {
     const value = snapshot.val();
     const uid = context.params.uid;
@@ -132,7 +138,7 @@ const processStop = (uid, game) => {
 
 }
 
-exports.startGame = functions.database.ref('/actions/{uid}/start/{pushId}')
+exports.start = functions.database.ref('/actions/{uid}/start/{pushId}')
   .onCreate((snapshot, context) => {
     const value = snapshot.val();
     const uid = context.params.uid;
